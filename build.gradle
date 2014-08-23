@@ -17,9 +17,10 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "3.0a"
-group= "cz.grossik.farmcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "3.0"
+group= "cze.grossik.farmcraft"
 archivesBaseName = "FarmCraft"
+
 
 minecraft {
     version = "1.7.10-10.13.0.1207"
