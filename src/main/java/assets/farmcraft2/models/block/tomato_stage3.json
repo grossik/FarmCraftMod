@@ -1,0 +1,7 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "farmcraft2:blocks/tomato_stage_3"
+    }
+}
+

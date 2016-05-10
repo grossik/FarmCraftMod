@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "farmcraft2:juiceron" },
+        "facing=south": { "model": "farmcraft2:juiceron", "y": 180 },
+        "facing=west":  { "model": "farmcraft2:juiceron", "y": 270 },
+        "facing=east":  { "model": "farmcraft2:juiceron", "y": 90 }
+    }
+}

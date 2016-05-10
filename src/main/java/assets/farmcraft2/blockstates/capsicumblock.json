@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "age=0": { "model": "farmcraft2:capsicum_stage0" },
+        "age=1": { "model": "farmcraft2:capsicum_stage0" },
+        "age=2": { "model": "farmcraft2:capsicum_stage1" },
+        "age=3": { "model": "farmcraft2:capsicum_stage1" },
+        "age=4": { "model": "farmcraft2:capsicum_stage2" },
+        "age=5": { "model": "farmcraft2:capsicum_stage2" },
+        "age=6": { "model": "farmcraft2:capsicum_stage2" },
+        "age=7": { "model": "farmcraft2:capsicum_stage3" }
+    }
+}

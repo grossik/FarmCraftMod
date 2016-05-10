@@ -1,0 +1,11 @@
+{
+    "variants": {
+        "bites=0": { "model": "farmcraft2:cheeseblock_uneaten" },
+        "bites=1": { "model": "farmcraft2:cheeseblock_slice1" },
+        "bites=2": { "model": "farmcraft2:cheeseblock_slice2" },
+        "bites=3": { "model": "farmcraft2:cheeseblock_slice3" },
+        "bites=4": { "model": "farmcraft2:cheeseblock_slice4" },
+        "bites=5": { "model": "farmcraft2:cheeseblock_slice5" },
+        "bites=6": { "model": "farmcraft2:cheeseblock_slice6" }
+    }
+}

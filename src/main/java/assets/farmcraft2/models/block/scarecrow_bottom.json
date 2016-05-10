@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_bottom",
+    "textures": {
+        "bottom": "farmcraft2:blocks/scarecrow_lower",
+        "top": "farmcraft2:blocks/scarecrow_upper"
+    }
+}

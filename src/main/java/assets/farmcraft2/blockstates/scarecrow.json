@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "facing=east,half=lower,hinge=left,open=false":  { "model": "farmcraft2:scarecrow_bottom" },
+        "facing=south,half=lower,hinge=left,open=false": { "model": "farmcraft2:scarecrow_bottom", "y": 90 },
+        "facing=west,half=lower,hinge=left,open=false":  { "model": "farmcraft2:scarecrow_bottom", "y": 180 },
+        "facing=north,half=lower,hinge=left,open=false": { "model": "farmcraft2:scarecrow_bottom", "y": 270 },
+        "facing=east,half=lower,hinge=right,open=false":  { "model": "farmcraft2:scarecrow_bottom_rh" },
+        "facing=south,half=lower,hinge=right,open=false": { "model": "farmcraft2:scarecrow_bottom_rh", "y": 90 },
+        "facing=west,half=lower,hinge=right,open=false":  { "model": "farmcraft2:scarecrow_bottom_rh", "y": 180 },
+        "facing=north,half=lower,hinge=right,open=false": { "model": "farmcraft2:scarecrow_bottom_rh", "y": 270 },
+        "facing=east,half=upper,hinge=left,open=false":  { "model": "farmcraft2:scarecrow_top" },
+        "facing=south,half=upper,hinge=left,open=false": { "model": "farmcraft2:scarecrow_top", "y": 90 },
+        "facing=west,half=upper,hinge=left,open=false":  { "model": "farmcraft2:scarecrow_top", "y": 180 },
+        "facing=north,half=upper,hinge=left,open=false": { "model": "farmcraft2:scarecrow_top", "y": 270 },
+        "facing=east,half=upper,hinge=right,open=false":  { "model": "farmcraft2:scarecrow_top_rh" },
+        "facing=south,half=upper,hinge=right,open=false": { "model": "farmcraft2:scarecrow_top_rh", "y": 90 },
+        "facing=west,half=upper,hinge=right,open=false":  { "model": "farmcraft2:scarecrow_top_rh", "y": 180 },
+        "facing=north,half=upper,hinge=right,open=false": { "model": "farmcraft2:scarecrow_top_rh", "y": 270 }
+    }
+}

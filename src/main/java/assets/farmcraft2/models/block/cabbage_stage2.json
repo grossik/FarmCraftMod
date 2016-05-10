@@ -1,0 +1,7 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "farmcraft2:blocks/cabbage_stage_2"
+    }
+}
+

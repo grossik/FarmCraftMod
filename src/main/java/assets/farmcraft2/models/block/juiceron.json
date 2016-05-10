@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "farmcraft2:blocks/juicer_top",
+        "front": "farmcraft2:blocks/juicer_front_on",
+        "side": "farmcraft2:blocks/juicer_side"
+    }
+}

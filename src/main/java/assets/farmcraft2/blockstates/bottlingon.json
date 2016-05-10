@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "farmcraft2:bottlingon" },
+        "facing=south": { "model": "farmcraft2:bottlingon", "y": 180 },
+        "facing=west":  { "model": "farmcraft2:bottlingon", "y": 270 },
+        "facing=east":  { "model": "farmcraft2:bottlingon", "y": 90 }
+    }
+}

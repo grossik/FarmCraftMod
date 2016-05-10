@@ -1,0 +1,22 @@
+{
+    "textures": {
+        "particle": "farmcraft2:blocks/cheese_side",
+        "bottom": "farmcraft2:blocks/cheese_bottom",
+        "top": "farmcraft2:blocks/cheese_top",
+        "side": "farmcraft2:blocks/cheese_side",
+        "inside": "farmcraft2:blocks/cheese_inner"
+    },
+    "elements": [
+        {   "from": [ 3, 0, 1 ],
+            "to": [ 15, 8, 15 ],
+            "faces": {
+                "down":  { "texture": "#bottom", "cullface": "down" },
+                "up":    { "texture": "#top" },
+                "north": { "texture": "#side" },
+                "south": { "texture": "#side" },
+                "west":  { "texture": "#inside" },
+                "east":  { "texture": "#side" }
+            }
+        }
+    ]
+}
