@@ -87,8 +87,8 @@ public class BlockHandler {
     public static Block BoilingOff = new Block_Boiling(false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("boilingoff");
 
     //Bottling
-    public static Block BottlingOn = new Block_Bottling(true).setHardness(5.0F).setResistance(10.0F).setUnlocalizedName("bottlingon");
-    public static Block BottlingOff = new Block_Bottling(false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("bottlingoff");
+    //public static Block BottlingOn = new Block_Bottling().setHardness(5.0F).setResistance(10.0F).setUnlocalizedName("bottlingon");
+    public static Block BottlingOff = new Block_Bottling().setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("bottlingoff");
     
     //Crushing
     public static Block CrushingOn = new Block_Crushing(true).setHardness(5.0F).setResistance(10.0F).setUnlocalizedName("crushingon");

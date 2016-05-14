@@ -1,5 +1,7 @@
 package cz.grossik.farmcraft2;
 
+import cz.grossik.farmcraft2.bottling.BottlingRecipeManager;
+import cz.grossik.farmcraft2.bottling.ItemStackMatcher;
 import cz.grossik.farmcraft2.handler.BlockHandler;
 import cz.grossik.farmcraft2.handler.FC2_GuiHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
@@ -14,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
@@ -29,7 +30,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -85,7 +85,6 @@ public class Main
         GameRegistry.registerBlock(BlockHandler.BoilingOff, "boilingoff");
         GameRegistry.registerBlock(BlockHandler.BoilingOn, "boilingon");
         GameRegistry.registerBlock(BlockHandler.BottlingOff, "bottlingoff");
-        GameRegistry.registerBlock(BlockHandler.BottlingOn, "bottlingon");
         GameRegistry.registerBlock(BlockHandler.WineBlock, "grapeblock");
         GameRegistry.registerBlock(BlockHandler.CrushingOff, "crushingOff");
         GameRegistry.registerBlock(BlockHandler.CrushingOn, "crushingOn");
@@ -165,7 +164,7 @@ public class Main
         GameRegistry.registerItem(ItemHandler.PineappleJuice, "pineapplejuice");
         GameRegistry.registerItem(ItemHandler.Wine, "grape");
         GameRegistry.registerItem(ItemHandler.WineSeeds, "grapeseeds");
-        GameRegistry.registerItem(ItemHandler.backpack, "backpack");
+        //GameRegistry.registerItem(ItemHandler.backpack, "backpack");
         GameRegistry.registerItem(ItemHandler.GlassFW, "glassfw");
         GameRegistry.registerItem(ItemHandler.GlassSW, "glasssw");
         GameRegistry.registerItem(ItemHandler.WineBucket, "winebucket");
@@ -240,7 +239,6 @@ public class Main
         GameRegistry.addShapelessRecipe(new ItemStack(ItemHandler.Toast, 8), new ItemStack(ItemHandler.Knife, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Items.bread));
         GameRegistry.addShapelessRecipe(new ItemStack(ItemHandler.slicedCheese, 6), new ItemStack(ItemHandler.Knife, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemHandler.CheeseItem));
         
-        
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.TomatoSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.RadishSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.BroccoliSeeds), 7);
@@ -255,6 +253,9 @@ public class Main
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.PineappleSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.WineSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.Corn_Seed), 7);
+        
+        BottlingRecipeManager.instance.addRecipe(new ItemStack(ItemHandler.KegOfBeer), new ItemStackMatcher(ItemHandler.KegForBeer), new ItemStackMatcher(ItemHandler.BeerBucket));
+        BottlingRecipeManager.instance.addRecipe(new ItemStack(ItemHandler.BottleSW), new ItemStackMatcher(ItemHandler.BottleFW), new ItemStackMatcher(ItemHandler.FermentedWine));
     }
 
     @EventHandler
@@ -271,7 +272,6 @@ public class Main
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.AppleCakeBlock), 0, new ModelResourceLocation(MODID + ":" + "applecakeblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.juicerOff), 0, new ModelResourceLocation(MODID + ":" + "juiceroff", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.juicerOn), 0, new ModelResourceLocation(MODID + ":" + "juiceron", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BottlingOn), 0, new ModelResourceLocation(MODID + ":" + "bottlingon", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BottlingOff), 0, new ModelResourceLocation(MODID + ":" + "bottlingoff", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPearNormal), 0, new ModelResourceLocation(MODID + ":" + "leavespn", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPear), 0, new ModelResourceLocation(MODID + ":" + "saplingPear", "inventory"));
@@ -282,7 +282,7 @@ public class Main
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumNormal), 0, new ModelResourceLocation(MODID + ":" + "leavesPL", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPlum), 0, new ModelResourceLocation(MODID + ":" + "saplingPlum", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumSS), 0, new ModelResourceLocation(MODID + ":" + "leavesplumplne", "inventory"));
-
+        
         //Crop        
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Corn), 0, new ModelResourceLocation(MODID + ":" + "cornblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.TomatoBlock), 0, new ModelResourceLocation(MODID + ":" + "tomatoblock", "inventory"));

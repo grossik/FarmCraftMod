@@ -1,171 +1,114 @@
 package cz.grossik.farmcraft2.bottling;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerBottling extends Container
 {
-    private final IInventory tileFurnace;
-    private int cookTime;
-    private int totalCookTime;
-    private int furnaceBurnTime;
-    private int currentItemBurnTime;
+  private TileEntityBottling te_alloyfurnace;
+  
+  // Slot numbers
+  public static final int SLOTS_TE = 0;
+  public static final int SLOTS_TE_SIZE = 3;
+  
+  public static final int SLOTS_INVENTORY = 3;
+  public static final int SLOTS_HOTBAR = 3 + 3 * 9;
 
-    public ContainerBottling(InventoryPlayer playerInventory, TileEntityBottling te)
+  private static final int SLOT_INVENTORY_X = 8;
+  private static final int SLOT_INVENTORY_Y = 84;
+
+  private static final int SLOT_HOTBAR_X = 8;
+  private static final int SLOT_HOTBAR_Y = 142;
+
+  public ContainerBottling(TileEntityBottling furnace, EntityPlayer player)
+  {
+    te_alloyfurnace = furnace;
+    te_alloyfurnace.openInventory(player);
+    int i,j;
+
+    
+    addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_A,56,17));
+    addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_B,56,53));
+    addSlotToContainer(new SlotOutput(te_alloyfurnace,TileEntityBottling.SLOT_OUTPUT,116,35));
+
+    for(i = 0; i < 3; ++i)
     {
-        this.tileFurnace = te;
-        this.addSlotToContainer(new Slot(te, 0, 56, 17));
-        this.addSlotToContainer(new SlotBottlingFuel(te, 1, 56, 53));
-        this.addSlotToContainer(new SlotBottlingOutput(playerInventory.player, te, 2, 116, 35));
+      for(j = 0; j < 9; ++j)
+      {
+        addSlotToContainer(new Slot(player.inventory, j + i * 9 + 9, SLOT_INVENTORY_X + j * 18, SLOT_INVENTORY_Y + i * 18));
+      }
+    }
+    for(i = 0; i < 9; ++i)
+    {
+      addSlotToContainer(new Slot(player.inventory, i, SLOT_HOTBAR_X + i * 18, SLOT_HOTBAR_Y));
+    }
+  }
 
-        for (int i = 0; i < 3; ++i)
+  public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+  {
+    return te_alloyfurnace.isUseableByPlayer(par1EntityPlayer);
+  }
+
+  public ItemStack transferStackInSlot(EntityPlayer player, int slot_index)
+  {
+    ItemStack slot_stack = null;
+    Slot slot = (Slot) inventorySlots.get(slot_index);
+
+    if (slot != null && slot.getHasStack())
+    {
+      ItemStack stack = slot.getStack();
+      slot_stack = stack.copy();
+
+      if (slot_index >= SLOTS_INVENTORY && slot_index < SLOTS_HOTBAR)
+      {
+        if(TileEntityFurnace.isItemFuel(stack))
         {
-            for (int j = 0; j < 9; ++j)
-            {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
-
-        for (int k = 0; k < 9; ++k)
+          int s = SLOTS_TE;
+          if(!mergeItemStack(stack, s, s + 1, false))
+          {
+            return null;
+          } 
+        } else if(!mergeItemStack(stack, SLOTS_TE, SLOTS_TE + TileEntityBottling.SLOT_INPUT_B + 1, false))
         {
-            this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 142));
+          return null;
         }
-    }
-
-    public void onCraftGuiOpened(ICrafting listener)
-    {
-        super.onCraftGuiOpened(listener);
-        listener.sendAllWindowProperties(this, this.tileFurnace);
-    }
-
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    public void detectAndSendChanges()
-    {
-        super.detectAndSendChanges();
-
-        for (int i = 0; i < this.crafters.size(); ++i)
+      } else if (slot_index >= SLOTS_HOTBAR && slot_index < SLOTS_HOTBAR + 9)
+      {
+        if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_INVENTORY + 3 * 9, false))
         {
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
-
-            if (this.cookTime != this.tileFurnace.getField(0))
-            {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.getField(0));
-            }
-
-            if (this.furnaceBurnTime != this.tileFurnace.getField(1))
-            {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.getField(1));
-            }
-
-            if (this.currentItemBurnTime != this.tileFurnace.getField(2))
-            {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
-            }
-
-            if (this.totalCookTime != this.tileFurnace.getField(3))
-            {
-                icrafting.sendProgressBarUpdate(this, 3, this.tileFurnace.getField(3));
-            }
+          return null;
         }
+      } else if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_HOTBAR + 9, false))
+      {
+        return null;
+      }
 
-        this.cookTime = this.tileFurnace.getField(2);
-        this.furnaceBurnTime = this.tileFurnace.getField(0);
-        this.currentItemBurnTime = this.tileFurnace.getField(1);
-        this.totalCookTime = this.tileFurnace.getField(3);
+      if (stack.stackSize == 0)
+      {
+        slot.putStack((ItemStack) null);
+      } else
+      {
+        slot.onSlotChanged();
+      }
+
+      if (stack.stackSize == slot_stack.stackSize)
+      {
+        return null;
+      }
+
+      slot.onPickupFromSlot(player, stack);
     }
 
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int data)
-    {
-        this.tileFurnace.setField(id, data);
-    }
+    return slot_stack;
+  }
 
-    public boolean canInteractWith(EntityPlayer playerIn)
-    {
-        return this.tileFurnace.isUseableByPlayer(playerIn);
-    }
-
-    /**
-     * Take a stack from the specified inventory slot.
-     */
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
-    {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
-
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (index == 2)
-            {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true))
-                {
-                    return null;
-                }
-
-                slot.onSlotChange(itemstack1, itemstack);
-            }
-            else if (index != 1 && index != 0)
-            {
-                if (BottlingRecipes.instance().getSmeltingResult(itemstack1) != null)
-                {
-                    if (!this.mergeItemStack(itemstack1, 0, 1, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (TileEntityBottling.isItemFuel(itemstack1))
-                {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (index >= 3 && index < 30)
-                {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (index >= 30 && index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
-            {
-                return null;
-            }
-
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
-            else
-            {
-                slot.onSlotChanged();
-            }
-
-            if (itemstack1.stackSize == itemstack.stackSize)
-            {
-                return null;
-            }
-
-            slot.onPickupFromSlot(playerIn, itemstack1);
-        }
-
-        return itemstack;
-    }
+  @Override
+  public void onContainerClosed(EntityPlayer player)
+  {
+    super.onContainerClosed(player);
+    te_alloyfurnace.closeInventory(player);
+  }
 }

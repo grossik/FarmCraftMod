@@ -1,8 +1,13 @@
 {
     "variants": {
-        "facing=north": { "model": "farmcraft2:bottlingoff" },
-        "facing=south": { "model": "farmcraft2:bottlingoff", "y": 180 },
-        "facing=west":  { "model": "farmcraft2:bottlingoff", "y": 270 },
-        "facing=east":  { "model": "farmcraft2:bottlingoff", "y": 90 }
+        "facing=north,state=off": { "model": "farmcraft2:bottlingoff" },
+        "facing=south,state=off": { "model": "farmcraft2:bottlingoff", "y": 180 },
+        "facing=west,state=off":  { "model": "farmcraft2:bottlingoff", "y": 270 },
+        "facing=east,state=off":  { "model": "farmcraft2:bottlingoff", "y": 90 },
+        
+        "facing=north,state=on": { "model": "farmcraft2:bottlingon" },
+        "facing=south,state=on": { "model": "farmcraft2:bottlingon", "y": 180 },
+        "facing=west,state=on":  { "model": "farmcraft2:bottlingon", "y": 270 },
+        "facing=east,state=on":  { "model": "farmcraft2:bottlingon", "y": 90 }
     }
 }

@@ -1,5 +1,7 @@
 package cz.grossik.farmcraft2.handler;
 
+import cz.grossik.farmcraft2.backpack.ContainerBackpack;
+import cz.grossik.farmcraft2.backpack.GuiBackpack;
 import cz.grossik.farmcraft2.block.boiling.ContainerBoiling;
 import cz.grossik.farmcraft2.block.boiling.GuiBoiling;
 import cz.grossik.farmcraft2.block.boiling.TileEntityBoiling;
@@ -32,9 +34,11 @@ public class FC2_GuiHandler implements IGuiHandler {
 	public static final int BACKPACK_GUI = 4;
 	public static final int MASHTUN_GUI = 5;
 	public static final int BOILING_GUI = 6;
-			
+
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	    BlockPos pos = new BlockPos(x,y,z);
+		
 		if(ID == JUICER_GUI)
 			return new ContainerJuicer(player.inventory, ((TileEntityJuicer)world.getTileEntity(new BlockPos(x, y, z))));
 		
@@ -45,9 +49,8 @@ public class FC2_GuiHandler implements IGuiHandler {
 			return new ContainerFermentingBarrel(player.inventory, ((TileEntityFermentingBarrel)world.getTileEntity(new BlockPos(x, y, z))));
 		
 		if(ID == BOTTLING_GUI)
-			return new ContainerBottling(player.inventory, ((TileEntityBottling)world.getTileEntity(new BlockPos(x, y, z))));
+	        return new ContainerBottling((TileEntityBottling)world.getTileEntity(pos),player);
 		
-		//Backpack
 		
 		if(ID == MASHTUN_GUI)
 			return new ContainerMashTun(player.inventory, ((TileEntityMashTun)world.getTileEntity(new BlockPos(x, y, z))));
@@ -60,6 +63,8 @@ public class FC2_GuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+	    BlockPos pos = new BlockPos(x,y,z);
+
 		if(ID == JUICER_GUI)
 			return new GuiJuicer(player.inventory, ((TileEntityJuicer)world.getTileEntity(new BlockPos(x, y, z))));
 		
@@ -70,9 +75,10 @@ public class FC2_GuiHandler implements IGuiHandler {
 			return new GuiFermentingBarrel(player.inventory, ((TileEntityFermentingBarrel)world.getTileEntity(new BlockPos(x, y, z))));
 		
 		if(ID == BOTTLING_GUI)
-			return new GuiBottling(player.inventory, ((TileEntityBottling)world.getTileEntity(new BlockPos(x, y, z))));
-		
-		//Backpack
+	      {
+	        TileEntityBottling te = (TileEntityBottling)world.getTileEntity(pos);
+	        return new GuiBottling(te,player);
+	      }
 		
 		if(ID == MASHTUN_GUI)
 			return new GuiMashTun(player.inventory, ((TileEntityMashTun)world.getTileEntity(new BlockPos(x, y, z))));

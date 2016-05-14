@@ -8,6 +8,16 @@ tile.crushingoff.name=Crushing
 tile.crushingon.name=Crushing
 tile.fermentingbarreloff.name=Ferment Barrel
 tile.fermentingbarrelon.name=Ferment Barrel
+tile.leavespn.name=Pear Leaves
+tile.saplingPear.name=Pear Sapling
+tile.leavesCH.name=Cherry Leaves
+tile.saplingCherry.name=Cherry Sapling
+tile.leavesPL.name=Plum Leaves
+tile.saplingPlum.name=Plum Sapling
+tile.mashtunoff.name=Mash Tun
+tile.mashtunon.name=Mash Tun
+tile.boilingoff.name=Boiling
+tile.boilingon.name=Boiling
 
 
 item.Corn_flakes.name=Corn Flakes
@@ -89,3 +99,5 @@ item.winebucket.name=Wine Bucket
 item.fermentedwine.name=Fermented Wine
 item.bottlefw.name=Bottle for Wine
 item.bottlesw.name=Bottle of Wine
+item.kegforbeer.name=Keg for Beer
+item.kegofbeer.name=Keg of Beer
