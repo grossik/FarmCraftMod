@@ -9,8 +9,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 public class ContainerBottling extends Container
 {
   private TileEntityBottling te_alloyfurnace;
-  
-  // Slot numbers
+
   public static final int SLOTS_TE = 0;
   public static final int SLOTS_TE_SIZE = 3;
   
@@ -28,7 +27,6 @@ public class ContainerBottling extends Container
     te_alloyfurnace = furnace;
     te_alloyfurnace.openInventory(player);
     int i,j;
-
     
     addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_A,56,17));
     addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_B,56,53));
@@ -104,7 +102,8 @@ public class ContainerBottling extends Container
 
     return slot_stack;
   }
-
+  
+  
   @Override
   public void onContainerClosed(EntityPlayer player)
   {

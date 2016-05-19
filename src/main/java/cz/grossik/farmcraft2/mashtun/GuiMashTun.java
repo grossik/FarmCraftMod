@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.mashtun;
+package cz.grossik.farmcraft2.mashtun;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;

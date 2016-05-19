@@ -5,7 +5,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -276,8 +275,9 @@ public class TileEntityBottling extends TileEntityFC implements ISidedInventory/
     if(last_progress != progress)
     {
       updateValue("CookTime",progress);
-    }
+    }  
   }
+
   
   public static boolean isItemFuel(ItemStack p_145954_0_)
   {

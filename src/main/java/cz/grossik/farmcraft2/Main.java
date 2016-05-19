@@ -5,6 +5,8 @@ import cz.grossik.farmcraft2.bottling.ItemStackMatcher;
 import cz.grossik.farmcraft2.handler.BlockHandler;
 import cz.grossik.farmcraft2.handler.FC2_GuiHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
+import cz.grossik.farmcraft2.liquid.LiquidMetalRegistry;
+import cz.grossik.farmcraft2.spigot.SpigotRecipeManager;
 import cz.grossik.farmcraft2.wordgen.WordGen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
@@ -22,6 +24,8 @@ import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -29,7 +33,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -44,12 +50,18 @@ public class Main
     @SidedProxy(clientSide = "cz.grossik.farmcraft2.ProxyClient", serverSide = "cz.grossik.farmcraft2.ProxyCommon")
     public static cz.grossik.farmcraft2.ProxyCommon proxy;
     
+    public static SimpleNetworkWrapper network_channel;
+    
     public static CreativeTabs FarmCraft2Tab = new FarmCraft2Tab("FarmCraft 2");
     
     public static BiomeGenBase FC2TreeBiome = new BiomeGenFC2Tree(false, (new BiomeGenBase.BiomeProperties("Fruit Biome")).setBaseHeight(0.125F).setHeightVariation(0.05F).setTemperature(0.8F).setRainfall(0.4F));
     
+    public static Fluid liquid_beer;
+    
     public Main()
     {
+        liquid_beer = LiquidMetalRegistry.instance.registerLiquidMetal("Beer", 700, 15);
+
     	//Register Block
     	GameRegistry.registerBlock(BlockHandler.Corn, "cornblock");
     	GameRegistry.registerBlock(BlockHandler.TomatoBlock, "tomatoblock");
@@ -90,6 +102,7 @@ public class Main
         GameRegistry.registerBlock(BlockHandler.CrushingOn, "crushingOn");
         GameRegistry.registerBlock(BlockHandler.FermentingBarrelOff, "fermentingbarelloff");
         GameRegistry.registerBlock(BlockHandler.FermentingBarrelOn, "fermentingbarellon");
+        GameRegistry.registerBlock(BlockHandler.spigot, "spigot");
         
     	//Register Item
     	GameRegistry.registerItem(ItemHandler.Corn_flakes, "Corn_flakes");
@@ -164,7 +177,7 @@ public class Main
         GameRegistry.registerItem(ItemHandler.PineappleJuice, "pineapplejuice");
         GameRegistry.registerItem(ItemHandler.Wine, "grape");
         GameRegistry.registerItem(ItemHandler.WineSeeds, "grapeseeds");
-        //GameRegistry.registerItem(ItemHandler.backpack, "backpack");
+        GameRegistry.registerItem(ItemHandler.backpack, "backpack");
         GameRegistry.registerItem(ItemHandler.GlassFW, "glassfw");
         GameRegistry.registerItem(ItemHandler.GlassSW, "glasssw");
         GameRegistry.registerItem(ItemHandler.WineBucket, "winebucket");
@@ -202,7 +215,7 @@ public class Main
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.BoilingOff, 1), new Object[]{"XXX", "XYX", "XXX", 'X', "ingotCopper", 'Y', ItemHandler.Hops}));
         GameRegistry.addRecipe(new ItemStack(ItemHandler.Bottle, 8), new Object[]{"X X", "XYX", "XXX", 'X', Blocks.glass, 'Y', ItemHandler.Hops});
         GameRegistry.addRecipe(new ItemStack(ItemHandler.BlueberrySeeds, 1), new Object[]{"X", 'X', ItemHandler.Blueberry});
-        GameRegistry.addRecipe(new ItemStack(BlockHandler.BottlingOff, 1), new Object[]{"PPP", "P#P", "PXP", 'P', Items.iron_ingot, '#', Blocks.lever, 'X', ItemHandler.Bottle});
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.BottlingOff, 1), new Object[]{"PPP", "P#P", "PXP", 'P', Items.iron_ingot, '#', Blocks.lever, 'X', Blocks.glass});
         GameRegistry.addRecipe(new ItemStack(ItemHandler.ColdWorts, 1), new Object[]{"X", 'X', ItemHandler.Worts});
         GameRegistry.addRecipe(new ItemStack(ItemHandler.JellyP, 1), new Object[]{"X", 'X', Items.sugar});
         GameRegistry.addRecipe(new ItemStack(ItemHandler.PearJam, 1), new Object[]{"YX", 'Y', ItemHandler.JellyP, 'X', ItemHandler.Pear});
@@ -254,8 +267,10 @@ public class Main
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.WineSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.Corn_Seed), 7);
         
-        BottlingRecipeManager.instance.addRecipe(new ItemStack(ItemHandler.KegOfBeer), new ItemStackMatcher(ItemHandler.KegForBeer), new ItemStackMatcher(ItemHandler.BeerBucket));
+        BottlingRecipeManager.instance.addRecipe(new ItemStack(ItemHandler.KegOfBeer, 1, 1), new ItemStackMatcher(ItemHandler.KegForBeer), new ItemStackMatcher(ItemHandler.BeerBucket));
         BottlingRecipeManager.instance.addRecipe(new ItemStack(ItemHandler.BottleSW), new ItemStackMatcher(ItemHandler.BottleFW), new ItemStackMatcher(ItemHandler.FermentedWine));
+
+        SpigotRecipeManager.instance.addRecipe(new ItemStackMatcher(ItemHandler.BeerBottle), new FluidStack(liquid_beer, 10), new ItemStack(ItemHandler.Bottle), null);
     }
 
     @EventHandler
@@ -264,7 +279,6 @@ public class Main
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
         //Block\\
-        
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.CheeseBlock), 0, new ModelResourceLocation(MODID + ":" + "cheeseblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Scarecrow), 0, new ModelResourceLocation(MODID + "scarecrow", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BlockCopper), 0, new ModelResourceLocation(MODID + ":" + "blockcopper", "inventory"));
@@ -298,7 +312,6 @@ public class Main
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BlueberryBlock), 0, new ModelResourceLocation(MODID + ":" + "blueberryblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.PineappleBlock), 0, new ModelResourceLocation(MODID + ":" + "pineappleblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.WineBlock), 0, new ModelResourceLocation(MODID + ":" + "grapeblock", "inventory"));
-
         
     	//Item\\
         
@@ -337,7 +350,8 @@ public class Main
         renderItem.getItemModelMesher().register(ItemHandler.ToastWPlumJ, 0, new ModelResourceLocation(MODID + ":" + "toastwithplumjam", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.Tomato, 0, new ModelResourceLocation(MODID + ":" + "tomato", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.Wine, 0, new ModelResourceLocation(MODID + ":" + "grape", "inventory"));
-        
+        renderItem.getItemModelMesher().register(ItemHandler.backpack, 0, new ModelResourceLocation(MODID + ":" + "backpack", "inventory"));
+
         //Seeds
         renderItem.getItemModelMesher().register(ItemHandler.Corn_Seed, 0, new ModelResourceLocation(MODID + ":" + "Corn_Seed", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.BarleySeeds, 0, new ModelResourceLocation(MODID + ":" + "barleyseeds", "inventory"));
@@ -398,7 +412,11 @@ public class Main
     }
     
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {         	
+    public void preInit(FMLPreInitializationEvent event) {       
+        network_channel = NetworkRegistry.INSTANCE.newSimpleChannel("EXTER.FOUNDRY");
+        network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.SERVER);
+        network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.CLIENT);
+        
         proxy.registerRenderer();
 
 		registerBiomeWithTypes(FC2TreeBiome, "FC2TreeBiome", 100, BiomeType.WARM, Type.PLAINS, Type.SPOOKY);

@@ -1,9 +1,14 @@
 package cz.grossik.farmcraft2;
 
 import cz.grossik.farmcraft2.block.Block_Scarecrow;
+import cz.grossik.farmcraft2.bottling.ModelBottling;
+import cz.grossik.farmcraft2.bottling.RendererBottling;
+import cz.grossik.farmcraft2.bottling.TileEntityBottling;
 import cz.grossik.farmcraft2.fermentingbarrel.RendererFermentingBarrel;
 import cz.grossik.farmcraft2.fermentingbarrel.TileEntityFermentingBarrel;
 import cz.grossik.farmcraft2.handler.BlockHandler;
+import cz.grossik.farmcraft2.spigot.RendererSpigot;
+import cz.grossik.farmcraft2.spigot.TileEntitySpigot;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.properties.IProperty;
@@ -16,6 +21,8 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void registerRenderer() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFermentingBarrel.class, new RendererFermentingBarrel());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBottling.class, new RendererBottling());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpigot.class, new RendererSpigot());
     }
     
     @Override

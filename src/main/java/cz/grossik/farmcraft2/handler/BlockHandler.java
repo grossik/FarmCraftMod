@@ -5,7 +5,6 @@ import cz.grossik.farmcraft2.block.Block_AppleCake;
 import cz.grossik.farmcraft2.block.Block_Cheese;
 import cz.grossik.farmcraft2.block.Block_Copper;
 import cz.grossik.farmcraft2.block.Block_Scarecrow;
-import cz.grossik.farmcraft2.block.boiling.Block_Boiling;
 import cz.grossik.farmcraft2.block.crop.Block_Barley;
 import cz.grossik.farmcraft2.block.crop.Block_Blueberry;
 import cz.grossik.farmcraft2.block.crop.Block_Broccoli;
@@ -26,14 +25,16 @@ import cz.grossik.farmcraft2.block.leaves.Block_LeavesPear;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPearSH;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPlum;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPlumSS;
-import cz.grossik.farmcraft2.block.mashtun.Block_MashTun;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingCherry;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingPear;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingPlum;
+import cz.grossik.farmcraft2.boiling.Block_Boiling;
 import cz.grossik.farmcraft2.bottling.Block_Bottling;
 import cz.grossik.farmcraft2.crushing.Block_Crushing;
 import cz.grossik.farmcraft2.fermentingbarrel.Block_FermentingBarrel;
 import cz.grossik.farmcraft2.juicer.Block_Juicer;
+import cz.grossik.farmcraft2.mashtun.Block_MashTun;
+import cz.grossik.farmcraft2.spigot.Block_Spigot;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
@@ -87,7 +88,6 @@ public class BlockHandler {
     public static Block BoilingOff = new Block_Boiling(false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("boilingoff");
 
     //Bottling
-    //public static Block BottlingOn = new Block_Bottling().setHardness(5.0F).setResistance(10.0F).setUnlocalizedName("bottlingon");
     public static Block BottlingOff = new Block_Bottling().setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("bottlingoff");
     
     //Crushing
@@ -97,4 +97,7 @@ public class BlockHandler {
     //Fermenting Barrel
     public static Block FermentingBarrelOn = new Block_FermentingBarrel(true).setHardness(5.0F).setResistance(10.0F).setUnlocalizedName("fermentingbarrelon");
     public static Block FermentingBarrelOff = new Block_FermentingBarrel(false).setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("fermentingbarreloff");
+
+    //Spigot
+    public static Block spigot = new Block_Spigot().setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("spigot");
 }

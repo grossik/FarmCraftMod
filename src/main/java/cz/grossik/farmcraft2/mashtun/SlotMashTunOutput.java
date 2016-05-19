@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.boiling;
+package cz.grossik.farmcraft2.mashtun;
 
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,13 +9,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.math.MathHelper;
 
-public class SlotBoilingOutput extends Slot
+public class SlotMashTunOutput extends Slot
 {
     /** The player that is using the GUI where this slot resides. */
     private EntityPlayer thePlayer;
     private int field_75228_b;
 
-    public SlotBoilingOutput(EntityPlayer player, IInventory inventoryIn, int slotIndex, int xPosition, int yPosition)
+    public SlotMashTunOutput(EntityPlayer player, IInventory inventoryIn, int slotIndex, int xPosition, int yPosition)
     {
         super(inventoryIn, slotIndex, xPosition, yPosition);
         this.thePlayer = player;
@@ -69,7 +69,7 @@ public class SlotBoilingOutput extends Slot
         if (!this.thePlayer.worldObj.isRemote)
         {
             int i = this.field_75228_b;
-            float f = BoilingRecipes.instance().getSmeltingExperience(stack);
+            float f = MashTunRecipes.instance().getSmeltingExperience(stack);
 
             if (f == 0.0F)
             {

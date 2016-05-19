@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.mashtun;
+package cz.grossik.farmcraft2.boiling;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,23 +11,23 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class MashTunRecipes
+public class BoilingRecipes
 {
-    private static final MashTunRecipes smeltingBase = new MashTunRecipes();
+    private static final BoilingRecipes smeltingBase = new BoilingRecipes();
     private Map<ItemStack, ItemStack> smeltingList = Maps.<ItemStack, ItemStack>newHashMap();
     private Map<ItemStack, Float> experienceList = Maps.<ItemStack, Float>newHashMap();
 
     /**
      * Returns an instance of FurnaceRecipes.
      */
-    public static MashTunRecipes instance()
+    public static BoilingRecipes instance()
     {
         return smeltingBase;
     }
 
-    private MashTunRecipes()
+    private BoilingRecipes()
     {
-        this.addSmelting(ItemHandler.Malt, new ItemStack(ItemHandler.Mash), 0.0F);
+        this.addSmelting(ItemHandler.Hops, new ItemStack(ItemHandler.Worts), 0.0F);
     }
 
     public void addSmeltingRecipeForBlock(Block input, ItemStack stack, float experience)

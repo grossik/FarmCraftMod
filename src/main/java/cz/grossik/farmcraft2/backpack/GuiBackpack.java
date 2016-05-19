@@ -1,47 +1,45 @@
 package cz.grossik.farmcraft2.backpack;
 
-import net.minecraft.client.Minecraft;
+import cz.grossik.farmcraft2.Main;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 
-@SideOnly(Side.CLIENT)
 public class GuiBackpack extends GuiContainer
 {
     private static final ResourceLocation CHEST_GUI_TEXTURE = new ResourceLocation("farmcraft2:textures/gui/container/backpack.png");
-    private IInventory upperChestInventory;
-    private IInventory lowerChestInventory;
-    private int inventoryRows;
 
-    public GuiBackpack(IInventory upperInv, IInventory lowerInv)
+    protected InventoryPlayer player;
+
+    final boolean isPrivate;
+
+    public GuiBackpack(InventoryPlayer playerInventory, int id, EntityPlayer player, World world, BlockPos pos)
     {
-        super(new ContainerBackpack(upperInv, lowerInv, Minecraft.getMinecraft().thePlayer));
-        this.upperChestInventory = upperInv;
-        this.lowerChestInventory = lowerInv;
-        this.allowUserInput = false;
-        int i = 222;
-        int j = i - 108;
-        this.inventoryRows = lowerInv.getSizeInventory() / 9;
-        this.ySize = j + this.inventoryRows * 18;
+        super(new ContainerBackpack(playerInventory, id, player, world, pos));
+
+        isPrivate = (id & 1) != 0;
+
+        this.player = playerInventory;
     }
 
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
-    {
-        this.fontRendererObj.drawString(this.lowerChestInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-        this.fontRendererObj.drawString(this.upperChestInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
-    }
-
+    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1, 1, 1, 1);
         this.mc.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.inventoryRows * 18 + 17);
-        this.drawTexturedModalRect(i, j + this.inventoryRows * 18 + 17, 0, 126, this.xSize, 96);
+
+        this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, 3 * 18 + 17);
+        this.drawTexturedModalRect(guiLeft, guiTop + 3 * 18 + 17, 0, 126, xSize, 96);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    {
+        this.fontRendererObj.drawString(I18n.translateToLocal("Backpack"), 8, 6, 4210752);
     }
 }

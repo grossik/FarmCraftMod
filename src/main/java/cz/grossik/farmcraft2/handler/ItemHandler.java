@@ -4,6 +4,7 @@ import cz.grossik.farmcraft2.Main;
 import cz.grossik.farmcraft2.backpack.Item_Backpack;
 import cz.grossik.farmcraft2.item.ItemBeer;
 import cz.grossik.farmcraft2.item.ItemGlassSW;
+import cz.grossik.farmcraft2.item.ItemKegBeer;
 import cz.grossik.farmcraft2.item.Item_BottleSW;
 import cz.grossik.farmcraft2.item.Item_Bucket;
 import cz.grossik.farmcraft2.item.Item_Knife;
@@ -16,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlockSpecial;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemSeeds;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 
 public class ItemHandler {
 
@@ -100,9 +102,9 @@ public class ItemHandler {
     public static Item Bottle = (new Item()).setUnlocalizedName("bottle").setCreativeTab(Main.FarmCraft2Tab);
     public static Item BeerBottle = (new ItemBeer(4, false)).setUnlocalizedName("beerbottle").setContainerItem(ItemHandler.Bottle).setCreativeTab(Main.FarmCraft2Tab);
     public static Item BeerBucket = (new Item_Bucket()).setUnlocalizedName("hotbeer").setCreativeTab(Main.FarmCraft2Tab);  
-    public static Item KegOfBeer = new Item().setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("kegofbeer");
     public static Item KegForBeer = new Item().setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("kegforbeer");
-    
+    public static Item KegOfBeer = new ItemKegBeer(1000).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("kegofbeer");
+
     //Wine
     public static Item FermentedWine = (new Item_Bucket()).setUnlocalizedName("fermentedwine").setCreativeTab(Main.FarmCraft2Tab);
     public static Item GlassFW = (new Item()).setUnlocalizedName("glassfw").setCreativeTab(Main.FarmCraft2Tab);

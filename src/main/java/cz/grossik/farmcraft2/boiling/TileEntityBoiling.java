@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.boiling;
+package cz.grossik.farmcraft2.boiling;
 
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;

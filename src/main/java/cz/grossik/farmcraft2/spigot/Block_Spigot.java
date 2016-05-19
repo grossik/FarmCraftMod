@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.bottling;
+package cz.grossik.farmcraft2.spigot;
 
 import cz.grossik.farmcraft2.Main;
 import cz.grossik.farmcraft2.block.BlockFC2SidedMachine;
@@ -14,10 +14,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class Block_Bottling extends BlockFC2SidedMachine
+public class Block_Spigot extends BlockFC2SidedMachine
 {
 
-  public Block_Bottling()
+  public Block_Spigot()
   {
     super(Material.rock);
   }
@@ -42,7 +42,7 @@ public class Block_Bottling extends BlockFC2SidedMachine
       return true;
     } else
     {
-      player.openGui(Main.instance, FC2_GuiHandler.BOTTLING_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+      player.openGui(Main.instance, FC2_GuiHandler.SPIGOT_GUI, world, pos.getX(), pos.getY(), pos.getZ());
       return true;
     }
   }
@@ -50,6 +50,6 @@ public class Block_Bottling extends BlockFC2SidedMachine
   @Override
   public TileEntity createNewTileEntity(World world, int meta)
   {
-    return new TileEntityBottling();
+    return new TileEntitySpigot();
   }
 }

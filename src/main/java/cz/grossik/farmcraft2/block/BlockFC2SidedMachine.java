@@ -21,7 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-
 public abstract class BlockFC2SidedMachine extends BlockContainer
 {
   private final Random rand = new Random();
@@ -114,12 +113,6 @@ public abstract class BlockFC2SidedMachine extends BlockContainer
   public BlockFC2SidedMachine(Material material)
   {
     super(material);
-  }
-
-  @Override
-  public EnumBlockRenderType getRenderType(IBlockState state)
-  {
-    return EnumBlockRenderType.MODEL;
   }
 
   @Override

@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.boiling;
+package cz.grossik.farmcraft2.mashtun;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerBoiling extends Container
+public class ContainerMashTun extends Container
 {
     private final IInventory tileFurnace;
     private int cookTime;
@@ -18,12 +18,12 @@ public class ContainerBoiling extends Container
     private int furnaceBurnTime;
     private int currentItemBurnTime;
 
-    public ContainerBoiling(InventoryPlayer playerInventory, TileEntityBoiling te)
+    public ContainerMashTun(InventoryPlayer playerInventory, TileEntityMashTun te)
     {
         this.tileFurnace = te;
         this.addSlotToContainer(new Slot(te, 0, 56, 34));
-        this.addSlotToContainer(new SlotBoilingFuel(te, 1, 26, 34));
-        this.addSlotToContainer(new SlotBoilingOutput(playerInventory.player, te, 2, 116, 35));
+        this.addSlotToContainer(new SlotMashTunFuel(te, 1, 26, 34));
+        this.addSlotToContainer(new SlotMashTunOutput(playerInventory.player, te, 2, 116, 35));
 
         for (int i = 0; i < 3; ++i)
         {
@@ -118,14 +118,14 @@ public class ContainerBoiling extends Container
             }
             else if (index != 1 && index != 0)
             {
-                if (BoilingRecipes.instance().getSmeltingResult(itemstack1) != null)
+                if (MashTunRecipes.instance().getSmeltingResult(itemstack1) != null)
                 {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false))
                     {
                         return null;
                     }
                 }
-                else if (TileEntityBoiling.isItemFuel(itemstack1))
+                else if (TileEntityMashTun.isItemFuel(itemstack1))
                 {
                     if (!this.mergeItemStack(itemstack1, 1, 2, false))
                     {

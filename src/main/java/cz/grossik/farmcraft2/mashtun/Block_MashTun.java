@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.boiling;
+package cz.grossik.farmcraft2.mashtun;
 
 import java.util.Random;
 
@@ -32,13 +32,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class Block_Boiling extends BlockContainer
+public class Block_MashTun extends BlockContainer
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     private final boolean isBurning;
     private static boolean keepInventory;
 
-    public Block_Boiling(boolean isBurning)
+    public Block_MashTun(boolean isBurning)
     {
         super(Material.rock);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -50,7 +50,7 @@ public class Block_Boiling extends BlockContainer
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return Item.getItemFromBlock(BlockHandler.BoilingOff);
+        return Item.getItemFromBlock(BlockHandler.MashTunOff);
     }
 
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
@@ -112,7 +112,7 @@ public class Block_Boiling extends BlockContainer
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (!worldIn.isRemote){
-             playerIn.openGui(Main.MODID, FC2_GuiHandler.BOILING_GUI, worldIn, pos.getX(), pos.getY(), pos.getZ());
+             playerIn.openGui(Main.MODID, FC2_GuiHandler.MASHTUN_GUI, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
             return true;
     }
@@ -125,13 +125,13 @@ public class Block_Boiling extends BlockContainer
 
         if (active)
         {
-            worldIn.setBlockState(pos, BlockHandler.BoilingOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, BlockHandler.BoilingOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.MashTunOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.MashTunOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
         else
         {
-            worldIn.setBlockState(pos, BlockHandler.BoilingOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, BlockHandler.BoilingOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.MashTunOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.MashTunOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
 
         keepInventory = false;
@@ -148,7 +148,7 @@ public class Block_Boiling extends BlockContainer
      */
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityBoiling();
+        return new TileEntityMashTun();
     }
 
     /**
@@ -171,9 +171,9 @@ public class Block_Boiling extends BlockContainer
         {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityBoiling)
+            if (tileentity instanceof TileEntityMashTun)
             {
-                ((TileEntityBoiling)tileentity).setCustomInventoryName(stack.getDisplayName());
+                ((TileEntityMashTun)tileentity).setCustomInventoryName(stack.getDisplayName());
             }
         }
     }
@@ -184,9 +184,9 @@ public class Block_Boiling extends BlockContainer
         {
             TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityBoiling)
+            if (tileentity instanceof TileEntityMashTun)
             {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityBoiling)tileentity);
+                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMashTun)tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
         }
@@ -206,7 +206,7 @@ public class Block_Boiling extends BlockContainer
 
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return new ItemStack(BlockHandler.BoilingOff);
+        return new ItemStack(BlockHandler.MashTunOff);
     }
 
     /**
@@ -232,16 +232,27 @@ public class Block_Boiling extends BlockContainer
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 
+    /**
+     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
         return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
     }
 
+    /**
+     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
+     * blockstate.
+     */
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));

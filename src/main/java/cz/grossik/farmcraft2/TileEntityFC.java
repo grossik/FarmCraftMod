@@ -245,6 +245,18 @@ public abstract class TileEntityFC extends TileEntity implements ITickable,IInve
     }
   }
 
+  @Override
+  public final void setInventorySlotContents(int slot, ItemStack stack)
+  {
+    inventory[slot] = stack;
+
+    if(stack != null && stack.stackSize > this.getInventoryStackLimit())
+    {
+      stack.stackSize = this.getInventoryStackLimit();
+    }
+    updateInventoryItem(slot);
+    markDirty();
+  }
   
   @Override
   public int getInventoryStackLimit()
@@ -282,19 +294,6 @@ public abstract class TileEntityFC extends TileEntity implements ITickable,IInve
       super.writeToNBT(update_packet);
     }
     writeTankToNBT(update_packet,slot);
-  }
-  
-  @Override
-  public final void setInventorySlotContents(int slot, ItemStack stack)
-  {
-    inventory[slot] = stack;
-
-    if(stack != null && stack.stackSize > this.getInventoryStackLimit())
-    {
-      stack.stackSize = this.getInventoryStackLimit();
-    }
-    updateInventoryItem(slot);
-    markDirty();
   }
   
   protected final void updateInventoryItem(int slot)
@@ -442,7 +441,8 @@ public abstract class TileEntityFC extends TileEntity implements ITickable,IInve
   protected void sendPacketToPlayers(NBTTagCompound data)
   {
     data.setInteger("dim", worldObj.provider.getDimension());
-
+    Main.network_channel.sendToAllAround(new MessageTileEntitySync(data),
+        new TargetPoint(worldObj.provider.getDimension(),pos.getX(),pos.getY(),pos.getZ(),192));
   }
    
 
@@ -563,11 +563,20 @@ public abstract class TileEntityFC extends TileEntity implements ITickable,IInve
       {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("rsmode", mode.id);
+        sendToServer(tag);
       }
     }
   }
   
-
+  protected void sendToServer(NBTTagCompound tag)
+  {
+    if(worldObj.isRemote)
+    {
+      super.writeToNBT(tag);
+      tag.setInteger("dim", worldObj.provider.getDimension());
+      Main.network_channel.sendToServer(new MessageTileEntitySync(tag));
+    }
+  }
 
   @Override
   public void openInventory(EntityPlayer player)

@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2.block.mashtun;
+package cz.grossik.farmcraft2.mashtun;
 
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;

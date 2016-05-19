@@ -2,12 +2,9 @@ package cz.grossik.farmcraft2.handler;
 
 import cz.grossik.farmcraft2.backpack.ContainerBackpack;
 import cz.grossik.farmcraft2.backpack.GuiBackpack;
-import cz.grossik.farmcraft2.block.boiling.ContainerBoiling;
-import cz.grossik.farmcraft2.block.boiling.GuiBoiling;
-import cz.grossik.farmcraft2.block.boiling.TileEntityBoiling;
-import cz.grossik.farmcraft2.block.mashtun.ContainerMashTun;
-import cz.grossik.farmcraft2.block.mashtun.GuiMashTun;
-import cz.grossik.farmcraft2.block.mashtun.TileEntityMashTun;
+import cz.grossik.farmcraft2.boiling.ContainerBoiling;
+import cz.grossik.farmcraft2.boiling.GuiBoiling;
+import cz.grossik.farmcraft2.boiling.TileEntityBoiling;
 import cz.grossik.farmcraft2.bottling.ContainerBottling;
 import cz.grossik.farmcraft2.bottling.GuiBottling;
 import cz.grossik.farmcraft2.bottling.TileEntityBottling;
@@ -20,6 +17,12 @@ import cz.grossik.farmcraft2.fermentingbarrel.TileEntityFermentingBarrel;
 import cz.grossik.farmcraft2.juicer.ContainerJuicer;
 import cz.grossik.farmcraft2.juicer.GuiJuicer;
 import cz.grossik.farmcraft2.juicer.TileEntityJuicer;
+import cz.grossik.farmcraft2.mashtun.ContainerMashTun;
+import cz.grossik.farmcraft2.mashtun.GuiMashTun;
+import cz.grossik.farmcraft2.mashtun.TileEntityMashTun;
+import cz.grossik.farmcraft2.spigot.ContainerSpigot;
+import cz.grossik.farmcraft2.spigot.GuiSpigot;
+import cz.grossik.farmcraft2.spigot.TileEntitySpigot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -34,6 +37,7 @@ public class FC2_GuiHandler implements IGuiHandler {
 	public static final int BACKPACK_GUI = 4;
 	public static final int MASHTUN_GUI = 5;
 	public static final int BOILING_GUI = 6;
+	public static final int SPIGOT_GUI = 7;
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -51,12 +55,18 @@ public class FC2_GuiHandler implements IGuiHandler {
 		if(ID == BOTTLING_GUI)
 	        return new ContainerBottling((TileEntityBottling)world.getTileEntity(pos),player);
 		
+		if(ID == BACKPACK_GUI){
+			return new ContainerBackpack(player.inventory, ID, player, world, new BlockPos(x, y, z));		
+		}
 		
 		if(ID == MASHTUN_GUI)
 			return new ContainerMashTun(player.inventory, ((TileEntityMashTun)world.getTileEntity(new BlockPos(x, y, z))));
 		
 		if(ID == BOILING_GUI)
 			return new ContainerBoiling(player.inventory, ((TileEntityBoiling)world.getTileEntity(new BlockPos(x, y, z))));
+		
+		if(ID == SPIGOT_GUI)
+	        return new ContainerSpigot((TileEntitySpigot)world.getTileEntity(pos),player);
 		
 		return null;
 	}
@@ -80,11 +90,21 @@ public class FC2_GuiHandler implements IGuiHandler {
 	        return new GuiBottling(te,player);
 	      }
 		
+		if(ID == BACKPACK_GUI){
+			return new GuiBackpack(player.inventory, ID, player, world, new BlockPos(x, y, z));
+		}
+		
 		if(ID == MASHTUN_GUI)
 			return new GuiMashTun(player.inventory, ((TileEntityMashTun)world.getTileEntity(new BlockPos(x, y, z))));
 			
 		if(ID == BOILING_GUI)
 			return new GuiBoiling(player.inventory, ((TileEntityBoiling)world.getTileEntity(new BlockPos(x, y, z))));
+		
+		if(ID == SPIGOT_GUI)
+	      {
+	        TileEntitySpigot te = (TileEntitySpigot)world.getTileEntity(pos);
+	        return new GuiSpigot(te,player);
+	      }
 		
 		return null;
 	}

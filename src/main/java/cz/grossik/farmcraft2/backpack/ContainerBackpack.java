@@ -1,102 +1,174 @@
 package cz.grossik.farmcraft2.backpack;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
+
+import java.util.UUID;
+
+import cz.grossik.farmcraft2.handler.ItemHandler;
 
 public class ContainerBackpack extends Container
 {
-    private IInventory lowerChestInventory;
-    private int numRows;
+    private World world;
+    private BlockPos pos;
 
-    public ContainerBackpack(IInventory playerInventory, IInventory chestInventory, EntityPlayer player)
+    public ContainerBackpack(InventoryPlayer playerInventory, int id, EntityPlayer player, World world, BlockPos pos)
     {
-        this.lowerChestInventory = chestInventory;
-        this.numRows = chestInventory.getSizeInventory() / 9;
-        chestInventory.openInventory(player);
-        int i = (this.numRows - 4) * 18;
+        boolean hasTE = world != null && (id & 2) == 0;
 
-        for (int j = 0; j < this.numRows; ++j)
+        int lockedSlot = -1;
+
+        UUID bound = player.getUniqueID();
+
+        if (hasTE)
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof TileEntityEnderChest)
+            {
+                TileEntityEnderChest chest = (TileEntityEnderChest) te;
+
+                chest.openChest();
+            }
+
+            if (te instanceof TileBackpack)
+            {
+            	TileBackpack chest = (TileBackpack) te;
+
+                if(chest.isBoundToPlayer())
+                    bound = chest.getPlayerBound();
+            }
+
+            this.world = world;
+            this.pos = pos;
+        }
+        else
+        {
+            lockedSlot = pos.getX();
+        }
+
+        IInventoryManager mgr = (id & 1) != 0 ?
+                InventoryManager.get(world).getPrivate(bound) :
+                InventoryManager.get(world);
+
+        IItemHandler inventory = mgr.getInventory(id >> 4);
+
+        for (int j = 0; j < 3; ++j)
         {
             for (int k = 0; k < 9; ++k)
             {
-                this.addSlotToContainer(new SlotBackpack(chestInventory, k + j * 9, 8 + k * 18, 18 + j * 18));
+                this.addSlotToContainer(new SlotItemHandler(inventory, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
         }
 
-        for (int l = 0; l < 3; ++l)
+        for (int py = 0; py < 3; ++py)
         {
-            for (int j1 = 0; j1 < 9; ++j1)
+            for (int px = 0; px < 9; ++px)
             {
-                this.addSlotToContainer(new Slot(playerInventory, j1 + l * 9 + 9, 8 + j1 * 18, 103 + l * 18 + i));
+                int slot = px + py * 9 + 9;
+                if (slot == lockedSlot)
+                    this.addSlotToContainer(new SlotNoAccess(playerInventory, slot, 8 + px * 18, 103 + py * 18 - 18));
+                else
+                    this.addSlotToContainer(new Slot(playerInventory, slot, 8 + px * 18, 103 + py * 18 - 18));
             }
         }
 
-        for (int i1 = 0; i1 < 9; ++i1)
+        for (int slot = 0; slot < 9; ++slot)
         {
-            this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 161 + i));
-        }
-    }
-
-    public boolean canInteractWith(EntityPlayer playerIn)
-    {
-        return this.lowerChestInventory.isUseableByPlayer(playerIn);
-    }
-
-    /**
-     * Take a stack from the specified inventory slot.
-     */
-    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
-    {
-        ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
-
-        if (slot != null && slot.getHasStack())
-        {
-            ItemStack itemstack1 = slot.getStack();
-            itemstack = itemstack1.copy();
-
-            if (index < this.numRows * 9)
-            {
-                if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false))
-            {
-                return null;
-            }
-
-            if (itemstack1.stackSize == 0)
-            {
-                slot.putStack((ItemStack)null);
-            }
+            if (slot == lockedSlot)
+                this.addSlotToContainer(new SlotNoAccess(playerInventory, slot, 8 + slot * 18, 143));
             else
-            {
-                slot.onSlotChanged();
-            }
+                this.addSlotToContainer(new Slot(playerInventory, slot, 8 + slot * 18, 143));
         }
-
-        return itemstack;
     }
 
-    /**
-     * Called when the container is closed.
-     */
+    public static class SlotNoAccess extends Slot
+    {
+        public SlotNoAccess(IInventory inventoryIn, int index, int xPosition, int yPosition)
+        {
+            super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean canTakeStack(EntityPlayer playerIn)
+        {
+            return false;
+        }
+
+        @Override
+        public boolean isItemValid(ItemStack stack)
+        {
+        	if(stack.getItem() == ItemHandler.backpack)
+        	{
+        		return true;
+        	}
+            return false;
+        }
+    }
+
+    @Override
     public void onContainerClosed(EntityPlayer playerIn)
     {
         super.onContainerClosed(playerIn);
-        this.lowerChestInventory.closeInventory(playerIn);
+
+        if (world != null)
+        {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof TileEntityEnderChest)
+            {
+                TileEntityEnderChest chest = (TileEntityEnderChest) te;
+                chest.closeChest();
+            }
+        }
     }
 
-    /**
-     * Return this chest container's lower chest inventory.
-     */
-    public IInventory getLowerChestInventory()
+    @Override
+    public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return this.lowerChestInventory;
+        return true;
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
+    {
+        Slot slot = this.inventorySlots.get(index);
+
+        if (slot == null || !slot.getHasStack())
+            return null;
+
+        ItemStack stack = slot.getStack();
+        ItemStack stackCopy = stack.copy();
+
+        if (index < 3 * 9)
+        {
+            if (!this.mergeItemStack(stack, 3 * 9, this.inventorySlots.size(), true))
+            {
+                return null;
+            }
+        }
+        else if (!this.mergeItemStack(stack, 0, 3 * 9, false))
+        {
+            return null;
+        }
+
+        if (stack.stackSize == 0)
+        {
+            slot.putStack(null);
+        }
+        else
+        {
+            slot.onSlotChanged();
+        }
+
+        return stackCopy;
     }
 }
