@@ -5,8 +5,10 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemStackMatcher implements IItemMatcher
 {
@@ -26,7 +28,7 @@ public class ItemStackMatcher implements IItemMatcher
   {
     this.match = match.copy();
   }
-
+  
   @Override
   public boolean apply(ItemStack input)
   {

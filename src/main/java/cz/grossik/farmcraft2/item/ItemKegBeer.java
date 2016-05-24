@@ -3,19 +3,21 @@ package cz.grossik.farmcraft2.item;
 import java.util.List;
 import java.util.Map;
 
+import cz.grossik.farmcraft2.Main;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -75,9 +77,11 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     }
   }
 
+
   private ItemStack fromFluidStack(FluidStack fluid)
   {
     ItemStack stack = new ItemStack(this, 1, 0);
+
     if(fluid == null)
     {
       return stack;
@@ -99,21 +103,34 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     Map<String, Fluid> fluids = FluidRegistry.getRegisteredFluids();
     for(Fluid f : fluids.values())
     {
-      if(f == FluidRegistry.LAVA || f == FluidRegistry.WATER)
+      if(f == Main.liquid_beer)
       {
-    	  return;
+          list.add(fromFluidStack(new FluidStack(f, capacity)));
       }
-      else if(f != null)
+      else
       {
-        list.add(fromFluidStack(new FluidStack(f, capacity)));
+        return;
       }
     }
   }
 
+	/**@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int itemSlot, boolean isSelected)
+	{	
+		NBTTagCompound nbt = new NBTTagCompound();
+	    if(itemStack.getTagCompound() == null)
+	    {
+	    	itemStack.setTagCompound(new NBTTagCompound());    	
+	    	FluidStack fluidBeer = new FluidStack(Main.liquid_beer, capacity);
+	    	fluidBeer.writeToNBT(nbt);
+	    	itemStack.getTagCompound().setTag("data", nbt);			
+	    }
+	}**/
+  
   @Override
   @SideOnly(Side.CLIENT)
   public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4)
-  {
+  {		
     FluidStack fluid = getFluid(stack);
     if(fluid == null)
     {
@@ -156,7 +173,6 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     FluidStack fluid = getFluid(stack);
     RayTraceResult obj = rayTrace(world, player, fluid == null || fluid.amount == 0);
 
-    
     if(obj == null)
     {
       return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -169,9 +185,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
       {
         IFluidHandler handler = (IFluidHandler)entity;
         if(player.isSneaking())
-        {
-          //Drain from container to the Tile Entity.
-          
+        {          
           FluidStack drained = drain(stack, 50, false);
           if(drained == null || drained.amount == 0)
           {
@@ -188,8 +202,6 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
           handler.fill(obj.sideHit, drained, true);
         } else
         {
-          //Fill container from the Tile Entity.
-
           FluidStack drained = handler.drain(obj.sideHit, 50, false);
           if(drained == null || drained.amount == 0)
           {
@@ -229,9 +241,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
         Material material = world.getBlockState(pos).getMaterial();
         
         if(world.isAirBlock(pos) || !material.isSolid())
-        {
-          //Place fluid in the world.
-          
+        {          
           FluidStack drained = drain(stack, FluidContainerRegistry.BUCKET_VOLUME, false);
           if(drained != null && drained.getFluid().canBePlacedInWorld() && drained.amount == FluidContainerRegistry.BUCKET_VOLUME)
           {
@@ -241,14 +251,6 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
               world.destroyBlock(pos, true);
             }
             Block block = drained.getFluid().getBlock();
-            if(block == Blocks.water)
-            {
-              block = Blocks.flowing_water;
-            }
-            if(block == Blocks.lava)
-            {
-              block = Blocks.flowing_lava;
-            }
             world.setBlockState(pos, block.getDefaultState());
           }
           return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -257,8 +259,6 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
       } else
       {
         BlockPos pos = obj.getBlockPos();
-        //Drain fluid from the world.
-
         if(!player.canPlayerEdit(pos, obj.sideHit, stack))
         {
           return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -308,22 +308,6 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
 
           return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
         }
-
-        if(state.getMaterial() == Material.lava && Integer.valueOf(0).equals(state.getValue(BlockLiquid.LEVEL)))
-        {
-          FluidStack fill = new FluidStack(FluidRegistry.LAVA,FluidContainerRegistry.BUCKET_VOLUME);
-          if(fill(stack, fill, false, true) == FluidContainerRegistry.BUCKET_VOLUME)
-          {
-            if(!splitStack(stack,player))
-            {
-              return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-            }
-            fill(stack, fill, true, false);
-            world.setBlockToAir(pos);
-          }
-
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
       }
     }
     return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
@@ -333,7 +317,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
 	return null;
 }
 
-@Override
+  @Override
   public FluidStack getFluid(ItemStack stack)
   {
     if(stack.getTagCompound() == null)
@@ -352,7 +336,8 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
   @SuppressWarnings("deprecation")
   private int fill(ItemStack stack, FluidStack fluid, boolean do_fill,boolean ignore_stacksize)
   {
-    if(!ignore_stacksize && stack.stackSize > 1)
+	 ItemStack stack1 = new ItemStack(this, 0, 1);
+    if(!ignore_stacksize && stack.stackSize > 1 && stack1.stackSize > 1)
     {
       return 0;
     }
@@ -395,7 +380,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     {
       container_fluid.amount = FluidContainerRegistry.BUCKET_VOLUME;
     }
-    setFluid(stack, container_fluid);
+    setFluid(stack1, container_fluid);
     return filled;
   }
 
@@ -430,7 +415,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     {
       fluid.amount -= drained;
       if(fluid.amount <= 0)
-      {
+      {  
         fluid = null;
       }
       setFluid(stack, fluid);

@@ -2,9 +2,6 @@ package cz.grossik.farmcraft2.bottling;
 
 import net.minecraft.item.ItemStack;
 
-/*
- * Alloy Mixer recipe manager
- */
 public class BottlingRecipe implements IBottlingRecipe
 {
   

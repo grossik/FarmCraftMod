@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.item.ItemStack;
 
 public class BottlingRecipeManager implements IBottlingRecipeManager
@@ -13,7 +14,7 @@ public class BottlingRecipeManager implements IBottlingRecipeManager
   public static final BottlingRecipeManager instance = new BottlingRecipeManager();
   
   private BottlingRecipeManager()
-  {
+  {	  
     recipes = new ArrayList<IBottlingRecipe>();
   }
   

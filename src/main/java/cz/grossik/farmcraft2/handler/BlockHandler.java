@@ -66,13 +66,13 @@ public class BlockHandler {
 
     //Strom
     public static Block leavesPearNormal = new Block_LeavesPear().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavespn");
-    public static Block leavesPearSH = (new Block_LeavesPearSH()).setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavespearplne");
+    public static Block leavesPearSH = (new Block_LeavesPearSH()).setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavespearplne").setCreativeTab(Main.FarmCraft2Tab);
     public static Block SaplingPear = (new Block_SaplingPear()).setHardness(0.0F).setUnlocalizedName("saplingPear");
     public static Block leavesCherryNormal = new Block_LeavesCherry().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavesCH");
-    public static Block leavesCherryST = (new Block_LeavesCherryST().setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavescherryplne"));
+    public static Block leavesCherryST = (new Block_LeavesCherryST().setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavescherryplne").setCreativeTab(Main.FarmCraft2Tab));
     public static Block SaplingCherry = (new Block_SaplingCherry().setHardness(0.0F).setUnlocalizedName("saplingCherry"));
     public static Block leavesPlumNormal = new Block_LeavesPlum().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavesPL");
-    public static Block leavesPlumSS = (new Block_LeavesPlumSS().setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavesplumplne"));
+    public static Block leavesPlumSS = (new Block_LeavesPlumSS().setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavesplumplne").setCreativeTab(Main.FarmCraft2Tab));
     public static Block SaplingPlum = (new Block_SaplingPlum().setHardness(0.0F).setUnlocalizedName("saplingPlum"));
 
     //Juicer

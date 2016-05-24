@@ -102,7 +102,6 @@ public class ItemHandler {
     public static Item Bottle = (new Item()).setUnlocalizedName("bottle").setCreativeTab(Main.FarmCraft2Tab);
     public static Item BeerBottle = (new ItemBeer(4, false)).setUnlocalizedName("beerbottle").setContainerItem(ItemHandler.Bottle).setCreativeTab(Main.FarmCraft2Tab);
     public static Item BeerBucket = (new Item_Bucket()).setUnlocalizedName("hotbeer").setCreativeTab(Main.FarmCraft2Tab);  
-    public static Item KegForBeer = new Item().setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("kegforbeer");
     public static Item KegOfBeer = new ItemKegBeer(1000).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("kegofbeer");
 
     //Wine
