@@ -188,9 +188,6 @@ public class TileEntityCrushing extends TileEntityLockable implements ITickable,
         return p_174903_0_.getField(0) > 0;
     }
 
-    /**
-     * Like the old updateEntity(), except more generic.
-     */
     public void update()
     {
         boolean flag = this.isBurning();

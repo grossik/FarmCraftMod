@@ -1,4 +1,4 @@
-package cz.grossik.farmcraft2;
+package cz.grossik.farmcraft2.wordgen;
 
 import java.util.Random;
 

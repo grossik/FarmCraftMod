@@ -7,6 +7,7 @@ import cz.grossik.farmcraft2.fermentingbarrel.TileEntityFermentingBarrel;
 import cz.grossik.farmcraft2.juicer.TileEntityJuicer;
 import cz.grossik.farmcraft2.mashtun.TileEntityMashTun;
 import cz.grossik.farmcraft2.spigot.TileEntitySpigot;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProxyCommon {
@@ -24,10 +25,11 @@ public class ProxyCommon {
     	GameRegistry.registerTileEntity(TileEntitySpigot.class, "TileEntitySpigot");
     }
 
-	public void preInit() {		
+	public void preInit() {	
 	}
 
 	public boolean isClient() {
 		return false;
 	}
+    
 }

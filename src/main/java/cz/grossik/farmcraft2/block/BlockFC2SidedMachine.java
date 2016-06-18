@@ -14,7 +14,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +26,7 @@ public abstract class BlockFC2SidedMachine extends BlockContainer
 
   public enum EnumMachineState implements IStringSerializable
   {
+	  
     OFF(0, "off"),
     ON(1, "on");
 
@@ -115,13 +115,13 @@ public abstract class BlockFC2SidedMachine extends BlockContainer
     super(material);
   }
 
-  @Override
-  protected BlockStateContainer createBlockState()
+  
+  public BlockStateContainer createBlockState()
   {
     return new BlockStateContainer(this, STATE, FACING );
   }
 
-  @Override
+  
   public IBlockState getStateFromMeta(int meta)
   {
     return getDefaultState().withProperty(FACING, EnumMachineFacing.fromID(meta & 3)).withProperty(STATE, EnumMachineState.fromID((meta >>> 2) & 1));
@@ -141,10 +141,10 @@ public abstract class BlockFC2SidedMachine extends BlockContainer
     super.onBlockAdded(world, pos, state);
     if(!world.isRemote)
     {
-      IBlockState block = world.getBlockState(pos.add(0, 0, -1));
-      IBlockState block1 = world.getBlockState(pos.add(0, 0, 1));
-      IBlockState block2 = world.getBlockState(pos.add(-1, 0, 0));
-      IBlockState block3 = world.getBlockState(pos.add(1, 0, 0));
+      IBlockState block = world.getBlockState(pos.north());
+      IBlockState block1 = world.getBlockState(pos.south());
+      IBlockState block2 = world.getBlockState(pos.west());
+      IBlockState block3 = world.getBlockState(pos.east());
       EnumMachineFacing facing = EnumMachineFacing.NORTH;
 
       if(block.isOpaqueCube() && !block1.isOpaqueCube())
@@ -163,7 +163,7 @@ public abstract class BlockFC2SidedMachine extends BlockContainer
       {
         facing = EnumMachineFacing.WEST;
       }
-      world.setBlockState(pos, state.withProperty(FACING, facing));
+      world.setBlockState(pos, state.withProperty(FACING, facing), 2);
     }
   }
 

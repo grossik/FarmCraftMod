@@ -332,7 +332,7 @@ public class TileEntityBoiling extends TileEntityLockable implements ITickable, 
         {
             Item item = p_145952_0_.getItem();
 
-            if (item == ItemHandler.HotWaterBucket) return 100;
+            if (item == ItemHandler.Mash) return 1200;
 
             return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(p_145952_0_);
         }

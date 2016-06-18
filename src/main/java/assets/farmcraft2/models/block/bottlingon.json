@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "farmcraft2:blocks/bottling_top",
-        "front": "farmcraft2:blocks/bottling_side",
-        "side": "farmcraft2:blocks/bottling_top"
-    }
-}

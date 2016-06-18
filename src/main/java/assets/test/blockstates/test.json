@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "level=0": { "model": "test:test" },
+        "level=1": { "model": "test:test_level1" }
+    }
+}

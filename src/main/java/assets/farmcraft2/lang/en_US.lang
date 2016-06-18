@@ -3,7 +3,6 @@ tile.blockcopper.name=Block of Copper
 tile.juiceroff.name=Juicer
 tile.juiceron.name=Juicer
 tile.bottlingoff.name=Bottling
-tile.bottlingon.name=Bottling
 tile.crushingoff.name=Crushing
 tile.crushingon.name=Crushing
 tile.fermentingbarreloff.name=Ferment Barrel
@@ -18,7 +17,13 @@ tile.mashtunoff.name=Mash Tun
 tile.mashtunon.name=Mash Tun
 tile.boilingoff.name=Boiling
 tile.boilingon.name=Boiling
+tile.leavespearplne.name=Leaves with Pear
+tile.leavescherryplne.name=Leaves with Cherry
+tile.leavesplumplne.name=Leaves with Plum
+tile.spigot.name=Spigot
 
+fluid.liquidbeer=Beer
+Beer.name=Beer
 
 item.Corn_flakes.name=Corn Flakes
 item.Corn_Seed.name=Corn Seeds

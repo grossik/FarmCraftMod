@@ -25,13 +25,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class BlockLiquidMetal extends BlockFluidClassic
+public class BlockBeer extends BlockFluidClassic
 {
   private Object solid;
   
   private IBlockState solid_state = null;
 
-  public BlockLiquidMetal(Fluid fluid, String name, Object solid_block)
+  public BlockBeer(Fluid fluid, String name, Object solid_block)
   {
     super(fluid, Material.water);
     setLightOpacity(0);

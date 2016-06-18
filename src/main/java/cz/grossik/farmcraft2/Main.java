@@ -3,12 +3,14 @@ package cz.grossik.farmcraft2;
 import cz.grossik.farmcraft2.handler.BlockHandler;
 import cz.grossik.farmcraft2.handler.FC2_GuiHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
-import cz.grossik.farmcraft2.liquid.LiquidMetalRegistry;
+import cz.grossik.farmcraft2.liquid.BeerRegistry;
+import cz.grossik.farmcraft2.wordgen.BiomeGenFC2Tree;
 import cz.grossik.farmcraft2.wordgen.WordGen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -18,6 +20,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +29,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -53,7 +57,7 @@ public class Main
     
     public Main()
     {
-        liquid_beer = LiquidMetalRegistry.instance.registerLiquidMetal("Beer", 700, 15);
+        liquid_beer = BeerRegistry.instance.registerLiquidMetal("beer", 700, 15);
 
     	//Register Block
     	GameRegistry.registerBlock(BlockHandler.Corn, "cornblock");
@@ -177,7 +181,6 @@ public class Main
         GameRegistry.registerItem(ItemHandler.FermentedWine, "fermentedwine");
         GameRegistry.registerItem(ItemHandler.BottleFW, "bottlefw");
         GameRegistry.registerItem(ItemHandler.BottleSW, "bottlesw");
-        //GameRegistry.registerItem(ItemHandler.KegForBeer, "kegforbeer");
         GameRegistry.registerItem(ItemHandler.KegOfBeer, "kegofbeer");
         
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.TomatoSeeds), 7);
@@ -221,7 +224,8 @@ public class Main
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumNormal), 0, new ModelResourceLocation(MODID + ":" + "leavesPL", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPlum), 0, new ModelResourceLocation(MODID + ":" + "saplingPlum", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumSS), 0, new ModelResourceLocation(MODID + ":" + "leavesplumplne", "inventory"));
-        
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.spigot), 0, new ModelResourceLocation(MODID + ":" + "spigot", "inventory"));
+
         //Crop        
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Corn), 0, new ModelResourceLocation(MODID + ":" + "cornblock", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.TomatoBlock), 0, new ModelResourceLocation(MODID + ":" + "tomatoblock", "inventory"));
@@ -323,6 +327,7 @@ public class Main
         renderItem.getItemModelMesher().register(ItemHandler.BucketCurd, 0, new ModelResourceLocation(MODID + ":" + "curd", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.BeerBucket, 0, new ModelResourceLocation(MODID + ":" + "hotbeer", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.KegOfBeer, 0, new ModelResourceLocation(MODID + ":" + "kegofbeer", "inventory"));
+        
 
         //Wine
         renderItem.getItemModelMesher().register(ItemHandler.GlassFW, 0, new ModelResourceLocation(MODID + ":" + "glassfw", "inventory"));
@@ -337,7 +342,7 @@ public class Main
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {       
-        network_channel = NetworkRegistry.INSTANCE.newSimpleChannel("EXTER.FOUNDRY");
+        network_channel = NetworkRegistry.INSTANCE.newSimpleChannel("GROSSIK.FARMCRAFT");
         network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.SERVER);
         network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.CLIENT);
         
@@ -360,4 +365,6 @@ public class Main
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(btype, new BiomeEntry(biome, weight));
 	}
+    
+
 }

@@ -1,5 +1,6 @@
 package cz.grossik.farmcraft2.crushing;
 
+import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -25,7 +26,7 @@ public class SlotCrushingOutput extends Slot
      * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
      */
     public boolean isItemValid(ItemStack stack)
-    {
+    {    	
         return false;
     }
 

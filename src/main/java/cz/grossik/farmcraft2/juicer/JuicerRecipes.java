@@ -25,7 +25,7 @@ public class JuicerRecipes
         return smeltingBase;
     }
 
-    private JuicerRecipes()
+    public JuicerRecipes()
     {
         this.addSmelting(Items.apple, new ItemStack(ItemHandler.AppleJuice), 0.0F);
         this.addSmelting(Items.carrot, new ItemStack(ItemHandler.CarrotJuice), 0.0F);

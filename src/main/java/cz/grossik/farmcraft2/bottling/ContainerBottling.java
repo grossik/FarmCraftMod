@@ -28,7 +28,7 @@ public class ContainerBottling extends Container
     te_alloyfurnace.openInventory(player);
     int i,j;
     
-    addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_A,56,17));
+    addSlotToContainer(new SlotInput(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_A,56,17));
     addSlotToContainer(new Slot(te_alloyfurnace,TileEntityBottling.SLOT_INPUT_B,56,53));
     addSlotToContainer(new SlotOutput(te_alloyfurnace,TileEntityBottling.SLOT_OUTPUT,116,35));
 

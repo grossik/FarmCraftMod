@@ -144,8 +144,8 @@ public class Block_FermentingBarrel extends BlockContainer
 
         if (active)
         {
-            worldIn.setBlockState(pos, BlockHandler.FermentingBarrelOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-            worldIn.setBlockState(pos, BlockHandler.FermentingBarrelOn.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.FermentingBarrelOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+            worldIn.setBlockState(pos, BlockHandler.FermentingBarrelOff.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
         }
         else
         {

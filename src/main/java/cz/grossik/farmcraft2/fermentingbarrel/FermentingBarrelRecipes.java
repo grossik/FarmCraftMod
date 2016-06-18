@@ -1,10 +1,13 @@
 package cz.grossik.farmcraft2.fermentingbarrel;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
 
+import cz.grossik.farmcraft2.bottling.IBottlingRecipe;
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
@@ -67,7 +70,7 @@ public class FermentingBarrelRecipes
 
         return null;
     }
-
+    
     /**
      * Compares two itemstacks to ensure that they are the same. This checks both the item and the metadata of the item.
      */

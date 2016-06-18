@@ -21,7 +21,7 @@ public class ContainerCrushing extends Container
     public ContainerCrushing(InventoryPlayer playerInventory, TileEntityCrushing te)
     {
         this.tileFurnace = te;
-        this.addSlotToContainer(new Slot(te, 0, 57, 35));
+        this.addSlotToContainer(new SlotCrushing(te, 0, 57, 35));
         this.addSlotToContainer(new SlotCrushingOutput(playerInventory.player, te, 2, 116, 35));
 
         for (int i = 0; i < 3; ++i)

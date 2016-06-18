@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	        
 	        if (block == BlockHandler.BottlingOff)
 	        {
-	            GlStateManager.translate((float)x + 0.5F, (float)y + 1.5F, (float)z + 0.5F);
+	            GlStateManager.translate((float)x + 0.5F, (float)y + 0.75F, (float)z + 0.5F);
 	            this.model.dole.showModel = true;
 	            this.model.j1.showModel = true;
 	            this.model.j2.showModel = true;
@@ -84,13 +84,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
             
 	        GlStateManager.enableRescaleNormal();
 	        GlStateManager.pushMatrix();
-	        GlStateManager.scale(1.0F, -1.0F, -1.0F);
+	        GlStateManager.scale(0.5F, -0.5F, -0.5F);
 	        this.model.render();
 	        GlStateManager.popMatrix();
 	        FontRenderer fontrenderer = this.getFontRenderer();
 	        float f3 = 0.015625F * f;
-	        GlStateManager.translate(0.0F, 0.5F * f, 0.07F * f);
-	        GlStateManager.scale(f3, -f3, f3);
 	        GlStateManager.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 	        GlStateManager.depthMask(false);
 	        GlStateManager.depthMask(true);

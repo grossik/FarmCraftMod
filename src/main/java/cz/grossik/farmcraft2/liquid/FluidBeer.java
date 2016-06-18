@@ -3,13 +3,13 @@ package cz.grossik.farmcraft2.liquid;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
-public class FluidLiquidMetal extends Fluid
+public class FluidBeer extends Fluid
 {
   private int color;
   
   public final boolean special;
 
-  public FluidLiquidMetal(String fluidName,ResourceLocation still, ResourceLocation flowing, int color, boolean special, int temperature,int luminosity)
+  public FluidBeer(String fluidName,ResourceLocation still, ResourceLocation flowing, int color, boolean special, int temperature,int luminosity)
   {
     super(fluidName,still, flowing);
     this.color = color | 0xFF000000;
@@ -19,7 +19,7 @@ public class FluidLiquidMetal extends Fluid
     setDensity(2000);
   }
 
-  public FluidLiquidMetal setColor(int fluid_color)
+  public FluidBeer setColor(int fluid_color)
   {
     color = fluid_color | 0xFF000000;
     return this;

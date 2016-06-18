@@ -5,20 +5,12 @@ import cz.grossik.farmcraft2.bottling.ItemStackMatcher;
 import cz.grossik.farmcraft2.handler.BlockHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import cz.grossik.farmcraft2.spigot.SpigotRecipeManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -51,12 +43,12 @@ public class FarmCraft2Recipe{
 	        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.BlockCopper, 1), new Object[]{"XXX", "XXX", "XXX", 'X', "ingotCopper"}));
 	        GameRegistry.addRecipe(new ItemStack(ItemHandler.SoakedBarley, 8), new Object[]{"XXX", "XYX", "XXX", 'X', ItemHandler.Barley, 'Y', Items.water_bucket});
 	        GameRegistry.addRecipe(new ItemStack(BlockHandler.MashTunOff, 1), new Object[]{"XXX", "XYX", "XXX", 'X', Items.iron_ingot, 'Y', ItemHandler.Malt});
-	        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.BoilingOff, 1), new Object[]{"XXX", "XYX", "XXX", 'X', "ingotCopper", 'Y', ItemHandler.Hops}));
-	        GameRegistry.addRecipe(new ItemStack(ItemHandler.Bottle, 8), new Object[]{"X X", "XYX", "XXX", 'X', Blocks.glass, 'Y', ItemHandler.Hops});
-	        GameRegistry.addRecipe(new ItemStack(ItemHandler.BlueberrySeeds, 1), new Object[]{"X", 'X', ItemHandler.Blueberry});
-	        GameRegistry.addRecipe(new ItemStack(BlockHandler.BottlingOff, 1), new Object[]{"PPP", "P#P", "PXP", 'P', Items.iron_ingot, '#', Blocks.lever, 'X', Blocks.glass});
-	        GameRegistry.addRecipe(new ItemStack(ItemHandler.ColdWorts, 1), new Object[]{"X", 'X', ItemHandler.Worts});
-	        GameRegistry.addRecipe(new ItemStack(ItemHandler.JellyP, 1), new Object[]{"X", 'X', Items.sugar});
+	    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.BoilingOff, 1), new Object[]{"XXX", "XYX", "XXX", 'X', "ingotCopper", 'Y', ItemHandler.Hops}));
+	    GameRegistry.addRecipe(new ItemStack(ItemHandler.Bottle, 8), new Object[]{"X X", "XYX", "XXX", 'X', Blocks.glass, 'Y', ItemHandler.Hops});
+	    GameRegistry.addRecipe(new ItemStack(ItemHandler.BlueberrySeeds, 1), new Object[]{"X", 'X', ItemHandler.Blueberry});
+	    GameRegistry.addRecipe(new ItemStack(BlockHandler.BottlingOff, 1), new Object[]{"PPP", "P#P", "PXP", 'P', Items.iron_ingot, '#', Blocks.lever, 'X', Blocks.glass});
+	    GameRegistry.addRecipe(new ItemStack(ItemHandler.ColdWorts, 1), new Object[]{"X", 'X', ItemHandler.Worts});
+	    GameRegistry.addRecipe(new ItemStack(ItemHandler.JellyP, 1), new Object[]{"X", 'X', Items.sugar});
 	    GameRegistry.addRecipe(new ItemStack(ItemHandler.PearJam, 1), new Object[]{"YX", 'Y', ItemHandler.JellyP, 'X', ItemHandler.Pear});
 	    GameRegistry.addRecipe(new ItemStack(ItemHandler.AppleJam, 1), new Object[]{"YX", 'Y', ItemHandler.JellyP, 'X', Items.apple});
 	    GameRegistry.addRecipe(new ItemStack(ItemHandler.AppleCake, 1), new Object[]{" E ", "BAB", "CCC", 'A', Items.milk_bucket, 'B', Items.sugar, 'C', Items.wheat, 'E', ItemHandler.AppleJam});
@@ -76,7 +68,9 @@ public class FarmCraft2Recipe{
 	    GameRegistry.addRecipe(new ItemStack(ItemHandler.BottleFW, 1), new Object[]{" X ", "X X", "XXX" , 'X', new ItemStack(Blocks.stained_glass, 1, 13)});
 	    GameRegistry.addRecipe(new ItemStack(BlockHandler.FermentingBarrelOff, 1), new Object[]{"XXX", "YXY", "XXX", 'Y', Items.iron_ingot, 'X', Blocks.planks});
 	    GameRegistry.addRecipe(new ItemStack(ItemHandler.KegOfBeer, 1), new Object[]{"XXX", "X X", "XXX" , 'X', new ItemStack(Items.iron_ingot)});
-	        
+	    GameRegistry.addRecipe(new ItemStack(BlockHandler.CrushingOff, 1), new Object[]{"XXX", "XYX", "X X" , 'X', new ItemStack(Items.iron_ingot), 'Y', new ItemStack(Blocks.piston)});
+	    GameRegistry.addRecipe(new ItemStack(BlockHandler.spigot, 1), new Object[]{"YXX", " XX", "ZXX" , 'X', new ItemStack(Items.iron_ingot), 'Y', new ItemStack(Items.stick), 'Z', new ItemStack(Blocks.cobblestone)});
+
 	    GameRegistry.addShapelessRecipe(new ItemStack(ItemHandler.ToastWPearJ, 1), new ItemStack(ItemHandler.BakedToast), new ItemStack(ItemHandler.PearJam));
 	    GameRegistry.addShapelessRecipe(new ItemStack(ItemHandler.ToastWCherryJ, 1), new ItemStack(ItemHandler.BakedToast), new ItemStack(ItemHandler.CherryJam));
 	    GameRegistry.addShapelessRecipe(new ItemStack(ItemHandler.ToastWPlumJ, 1), new ItemStack(ItemHandler.BakedToast), new ItemStack(ItemHandler.PlumJam));

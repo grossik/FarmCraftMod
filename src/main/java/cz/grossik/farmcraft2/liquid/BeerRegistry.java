@@ -16,19 +16,19 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class LiquidMetalRegistry implements IFluidRegistry
+public class BeerRegistry implements IFluidRegistry
 {
-  private Map<String,FluidLiquidMetal> registry;
+  private Map<String,FluidBeer> registry;
   
-  static public LiquidMetalRegistry instance = new LiquidMetalRegistry();
+  static public BeerRegistry instance = new BeerRegistry();
   
-  private LiquidMetalRegistry()
+  private BeerRegistry()
   {
-    registry = new HashMap<String,FluidLiquidMetal>();
+    registry = new HashMap<String,FluidBeer>();
     MinecraftForge.EVENT_BUS.register(this);
   }
 
-  public FluidLiquidMetal registerLiquidMetal(String metal_name,int temperature,int luminosity)
+  public FluidBeer registerLiquidMetal(String metal_name,int temperature,int luminosity)
   {
     return registerLiquidMetal(metal_name,temperature,luminosity,"liquid" + metal_name,0xFFFFFF);
   }
@@ -53,9 +53,9 @@ public class LiquidMetalRegistry implements IFluidRegistry
     return null;
   }
   
-  public FluidLiquidMetal registerLiquidMetal(String metal_name,int temperature,int luminosity,String texture,int color)
+  public FluidBeer registerLiquidMetal(String metal_name,int temperature,int luminosity,String texture,int color)
   {
-    FluidLiquidMetal fluid = new FluidLiquidMetal("liquid" + metal_name,
+    FluidBeer fluid = new FluidBeer("liquid" + metal_name,
         new ResourceLocation("farmcraft2","blocks/" + texture + "_still"),
         new ResourceLocation("farmcraft2","blocks/" + texture + "_flow"),
         color, false, temperature,luminosity);
@@ -68,7 +68,7 @@ public class LiquidMetalRegistry implements IFluidRegistry
       solid = block_name;
     }
 
-    Block liquid_block = new BlockLiquidMetal(fluid, "liquid" + metal_name, solid);
+    Block liquid_block = new BlockBeer(fluid, "liquid" + metal_name, solid);
     GameRegistry.register(liquid_block);
     GameRegistry.register(new ItemBlock(liquid_block).setRegistryName(liquid_block.getRegistryName())); 
 
@@ -79,12 +79,12 @@ public class LiquidMetalRegistry implements IFluidRegistry
   }
 
   @Override
-  public FluidLiquidMetal getFluid(String name)
+  public FluidBeer getFluid(String name)
   {
     return registry.get(name);
   }
 
-  public Map<String,FluidLiquidMetal> getFluids()
+  public Map<String,FluidBeer> getFluids()
   {
     return Collections.unmodifiableMap(registry);
   }
