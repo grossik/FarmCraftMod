@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "farmcraft2:mashtunon" },
+        "facing=south": { "model": "farmcraft2:mashtunon", "y": 180 },
+        "facing=west":  { "model": "farmcraft2:mashtunon", "y": 270 },
+        "facing=east":  { "model": "farmcraft2:mashtunon", "y": 90 }
+    }
+}

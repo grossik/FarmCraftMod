@@ -1,6 +1,8 @@
 package cz.grossik.farmcraft2;
 
 import cz.grossik.farmcraft2.block.Block_Scarecrow;
+import cz.grossik.farmcraft2.bottling.RendererBottling;
+import cz.grossik.farmcraft2.bottling.TileEntityBottling;
 import cz.grossik.farmcraft2.crushing.RendererCrushing;
 import cz.grossik.farmcraft2.crushing.TileEntityCrushing;
 import cz.grossik.farmcraft2.fermentingbarrel.RendererFermentingBarrel;
@@ -24,7 +26,7 @@ public class ProxyClient extends ProxyCommon {
     @Override
     public void registerRenderer() {
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFermentingBarrel.class, new RendererFermentingBarrel());
-    	//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBottling.class, new RendererBottling());
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBottling.class, new RendererBottling());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpigot.class, new RendererSpigot());
     	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrushing.class, new RendererCrushing());
     }
@@ -41,8 +43,7 @@ public class ProxyClient extends ProxyCommon {
     	ModelLoader.setCustomStateMapper(BlockHandler.leavesPlumNormal, new StateMap.Builder().ignore(new IProperty[] {BlockLeaves.CHECK_DECAY, BlockLeaves.DECAYABLE}).build());
     	ModelLoader.setCustomStateMapper(BlockHandler.leavesPlumSS, new StateMap.Builder().ignore(new IProperty[] {BlockLeaves.CHECK_DECAY, BlockLeaves.DECAYABLE}).build());
     	ModelLoader.setCustomStateMapper(BlockHandler.SaplingPlum, new StateMap.Builder().ignore(new IProperty[] {BlockSapling.TYPE}).build());         
-    	
-        
+
         VillagerRegistry.instance().registerVillageCreationHandler(new VillageFieldHandler());
         MapGenStructureIO.registerStructureComponent(ComponentVillageField.class, "FieldFC2");
     }

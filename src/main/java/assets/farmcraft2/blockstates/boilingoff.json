@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "farmcraft2:boilingoff" },
+        "facing=south": { "model": "farmcraft2:boilingoff", "y": 180 },
+        "facing=west":  { "model": "farmcraft2:boilingoff", "y": 270 },
+        "facing=east":  { "model": "farmcraft2:boilingoff", "y": 90 }
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "farmcraft2:blocks/mashtun_top_vrch",
+        "front": "farmcraft2:blocks/mashtun_top",
+        "side": "farmcraft2:blocks/mashtun_top"
+    }
+}

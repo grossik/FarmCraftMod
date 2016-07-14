@@ -55,18 +55,6 @@ public class BlockBeer extends BlockFluidClassic
   }
 
   @Override
-  public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
-  {
-    return 300;
-  }
-
-  @Override
-  public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
-  {
-    return 0;
-  }
-
-  @Override
   @SideOnly(Side.CLIENT)
   public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand)
   {
@@ -224,23 +212,5 @@ public class BlockBeer extends BlockFluidClassic
       return true;
     }
     return false;
-  }
-  
-  @Override
-  public void onEntityCollidedWithBlock(World wWorld, BlockPos pos, IBlockState state, Entity entity)
-  {
-    if(entity instanceof EntityLivingBase)
-    {
-      entity.motionX *= 0.5;
-      entity.motionZ *= 0.5;
-    }
-    if(!entity.isImmuneToFire())
-    {
-      if(!(entity instanceof EntityItem))
-      {
-        entity.attackEntityFrom(DamageSource.lava, 4);
-      }
-      entity.setFire(15);
-    }
   }
 }

@@ -97,8 +97,8 @@ public class Main
         GameRegistry.registerBlock(BlockHandler.WineBlock, "grapeblock");
         GameRegistry.registerBlock(BlockHandler.CrushingOff, "crushingOff");
         GameRegistry.registerBlock(BlockHandler.CrushingOn, "crushingOn");
-        GameRegistry.registerBlock(BlockHandler.FermentingBarrelOff, "fermentingbarelloff");
-        GameRegistry.registerBlock(BlockHandler.FermentingBarrelOn, "fermentingbarellon");
+        GameRegistry.registerBlock(BlockHandler.FermentingBarrelOff, "fermentingbarreloff");
+        GameRegistry.registerBlock(BlockHandler.FermentingBarrelOn, "fermentingbarrelon");
         GameRegistry.registerBlock(BlockHandler.spigot, "spigot");
         
     	//Register Item
@@ -225,6 +225,11 @@ public class Main
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPlum), 0, new ModelResourceLocation(MODID + ":" + "saplingPlum", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumSS), 0, new ModelResourceLocation(MODID + ":" + "leavesplumplne", "inventory"));
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.spigot), 0, new ModelResourceLocation(MODID + ":" + "spigot", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.MashTunOff), 0, new ModelResourceLocation(MODID + ":" + "mashtunoff", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.MashTunOn), 0, new ModelResourceLocation(MODID + ":" + "mashtunon", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BoilingOff), 0, new ModelResourceLocation(MODID + ":" + "boilingoff", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BoilingOn), 0, new ModelResourceLocation(MODID + ":" + "boilingon", "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.FermentingBarrelOff), 0, new ModelResourceLocation(MODID + ":" + "fermentingbarreloff", "inventory"));
 
         //Crop        
         renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Corn), 0, new ModelResourceLocation(MODID + ":" + "cornblock", "inventory"));
@@ -328,10 +333,12 @@ public class Main
         renderItem.getItemModelMesher().register(ItemHandler.BeerBucket, 0, new ModelResourceLocation(MODID + ":" + "hotbeer", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.KegOfBeer, 0, new ModelResourceLocation(MODID + ":" + "kegofbeer", "inventory"));
         
-
         //Wine
         renderItem.getItemModelMesher().register(ItemHandler.GlassFW, 0, new ModelResourceLocation(MODID + ":" + "glassfw", "inventory"));
         renderItem.getItemModelMesher().register(ItemHandler.GlassSW, 0, new ModelResourceLocation(MODID + ":" + "glasssw", "inventory"));
+        renderItem.getItemModelMesher().register(ItemHandler.BottleFW, 0, new ModelResourceLocation(MODID + ":" + "bottlefw", "inventory"));
+        renderItem.getItemModelMesher().register(ItemHandler.BottleSW, 0, new ModelResourceLocation(MODID + ":" + "bottlesw", "inventory"));
+
     }
     
     @EventHandler
@@ -365,6 +372,4 @@ public class Main
 		BiomeDictionary.registerBiomeType(biome, types);
 		BiomeManager.addBiome(btype, new BiomeEntry(biome, weight));
 	}
-    
-
 }
