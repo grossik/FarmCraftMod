@@ -1,10 +1,12 @@
 package cz.grossik.farmcraft2.handler;
 
 import cz.grossik.farmcraft2.Main;
+import cz.grossik.farmcraft2.block.BlockMapleWood;
 import cz.grossik.farmcraft2.block.Block_AppleCake;
 import cz.grossik.farmcraft2.block.Block_Cheese;
 import cz.grossik.farmcraft2.block.Block_Copper;
 import cz.grossik.farmcraft2.block.Block_Scarecrow;
+import cz.grossik.farmcraft2.block.crop.BlockMarijuana;
 import cz.grossik.farmcraft2.block.crop.Block_Barley;
 import cz.grossik.farmcraft2.block.crop.Block_Blueberry;
 import cz.grossik.farmcraft2.block.crop.Block_Broccoli;
@@ -19,22 +21,33 @@ import cz.grossik.farmcraft2.block.crop.Block_Radish;
 import cz.grossik.farmcraft2.block.crop.Block_Rice;
 import cz.grossik.farmcraft2.block.crop.Block_Strawberry;
 import cz.grossik.farmcraft2.block.crop.Block_Tomato;
+import cz.grossik.farmcraft2.block.leaves.BlockLeavesMaple;
+import cz.grossik.farmcraft2.block.leaves.Block_LeavesBanana;
+import cz.grossik.farmcraft2.block.leaves.Block_LeavesBananaSB;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesCherry;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesCherryST;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPear;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPearSH;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPlum;
 import cz.grossik.farmcraft2.block.leaves.Block_LeavesPlumSS;
+import cz.grossik.farmcraft2.block.sapling.BlockSaplingMaple;
+import cz.grossik.farmcraft2.block.sapling.Block_SaplingBanana;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingCherry;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingPear;
 import cz.grossik.farmcraft2.block.sapling.Block_SaplingPlum;
 import cz.grossik.farmcraft2.boiling.Block_Boiling;
 import cz.grossik.farmcraft2.bottling.Block_Bottling;
 import cz.grossik.farmcraft2.crushing.Block_Crushing;
+import cz.grossik.farmcraft2.easteregg.BlockHomerStatue;
 import cz.grossik.farmcraft2.fermentingbarrel.Block_FermentingBarrel;
+import cz.grossik.farmcraft2.flowers.BlockLily;
+import cz.grossik.farmcraft2.flowers.BlockRose;
+import cz.grossik.farmcraft2.flowers.BlockWhiteLily;
 import cz.grossik.farmcraft2.juicer.Block_Juicer;
 import cz.grossik.farmcraft2.mashtun.Block_MashTun;
+import cz.grossik.farmcraft2.pan.BlockPan;
 import cz.grossik.farmcraft2.spigot.Block_Spigot;
+import cz.grossik.farmcraft2.treetap.BlockTreetap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.material.Material;
@@ -56,13 +69,21 @@ public class BlockHandler {
     public static Block BlueberryBlock = new Block_Blueberry().setHardness(0.2F).setUnlocalizedName("blueberryblock");
     public static Block PineappleBlock = new Block_Pineapple().setHardness(0.2F).setUnlocalizedName("pineappleblock");
     public static Block WineBlock = new Block_Grape().setUnlocalizedName("grapeblock");
+    public static Block MarijuanaBlock = new BlockMarijuana().setUnlocalizedName("marijuanablock");
     
     //Zbytek
-    public static Block Scarecrow = new Block_Scarecrow(Material.wood).setHardness(3.0F).setUnlocalizedName("scarecrow");
+    public static Block Scarecrow = new Block_Scarecrow(false).setHardness(3.0F).setUnlocalizedName("scarecrow");
+    public static Block ScarecrowTop = new Block_Scarecrow(true).setHardness(3.0F).setUnlocalizedName("scarecrow_top");
     public static Block CheeseBlock = new Block_Cheese().setHardness(0.5F).setUnlocalizedName("cheeseblock");
     public static Block OreCopper = new BlockOre().setHardness(3.0F).setResistance(5.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("orecopper");
     public static Block BlockCopper = (new Block_Copper().setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("blockcopper"));
     public static Block AppleCakeBlock = (new Block_AppleCake()).setHardness(0.5F).setUnlocalizedName("applecakeblock");
+    public static Block HomerStatue = new BlockHomerStatue(false).setUnlocalizedName("statue_homer");
+    public static Block HomerStatueTop = new BlockHomerStatue(true).setUnlocalizedName("statue_homer_top");
+
+    //Kvìtiny
+    public static BlockRose Rose = new BlockRose();
+    public static BlockLily Lily = new BlockWhiteLily();
 
     //Strom
     public static Block leavesPearNormal = new Block_LeavesPear().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavespn");
@@ -74,6 +95,12 @@ public class BlockHandler {
     public static Block leavesPlumNormal = new Block_LeavesPlum().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavesPL");
     public static Block leavesPlumSS = (new Block_LeavesPlumSS().setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavesplumplne").setCreativeTab(Main.FarmCraft2Tab));
     public static Block SaplingPlum = (new Block_SaplingPlum().setHardness(0.0F).setUnlocalizedName("saplingPlum"));
+    public static Block leavesBananaNormal = new Block_LeavesBanana().setHardness(0.2F).setLightOpacity(1).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("leavesbn");
+    public static Block leavesBananaSB = (new Block_LeavesBananaSB()).setHardness(0.2F).setLightOpacity(1).setUnlocalizedName("leavesbananaplne").setCreativeTab(Main.FarmCraft2Tab);
+    public static Block SaplingBanana = (new Block_SaplingBanana()).setHardness(0.0F).setUnlocalizedName("saplingBanana");   
+    public static Block MapleWood = new BlockMapleWood().setCreativeTab(Main.FarmCraft2Tab).setResistance(8.0F).setUnlocalizedName("maple_wood");
+    public static Block MapleLeaves = new BlockLeavesMaple().setHardness(0.2F).setResistance(1.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("maple_leaves");
+    public static Block SaplingMaple = (new BlockSaplingMaple()).setHardness(0.0F).setUnlocalizedName("saplingMaple");
 
     //Juicer
     public static Block juicerOn = new Block_Juicer(true).setHardness(5.5F).setResistance(15.0F).setUnlocalizedName("juiceron");
@@ -100,4 +127,10 @@ public class BlockHandler {
 
     //Spigot
     public static Block spigot = new Block_Spigot().setHardness(5.0F).setResistance(10.0F).setCreativeTab(Main.FarmCraft2Tab).setUnlocalizedName("spigot");
+
+    //Panvicka
+    public static Block Pan = new BlockPan();
+    
+    //Treetap
+    public static Block Treetap = new BlockTreetap().setUnlocalizedName("treetap");
 }

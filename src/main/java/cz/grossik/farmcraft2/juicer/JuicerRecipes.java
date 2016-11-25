@@ -17,9 +17,6 @@ public class JuicerRecipes
     private Map<ItemStack, ItemStack> smeltingList = Maps.<ItemStack, ItemStack>newHashMap();
     private Map<ItemStack, Float> experienceList = Maps.<ItemStack, Float>newHashMap();
 
-    /**
-     * Returns an instance of FurnaceRecipes.
-     */
     public static JuicerRecipes instance()
     {
         return smeltingBase;
@@ -27,8 +24,8 @@ public class JuicerRecipes
 
     public JuicerRecipes()
     {
-        this.addSmelting(Items.apple, new ItemStack(ItemHandler.AppleJuice), 0.0F);
-        this.addSmelting(Items.carrot, new ItemStack(ItemHandler.CarrotJuice), 0.0F);
+        this.addSmelting(Items.APPLE, new ItemStack(ItemHandler.AppleJuice), 0.0F);
+        this.addSmelting(Items.CARROT, new ItemStack(ItemHandler.CarrotJuice), 0.0F);
         this.addSmelting(ItemHandler.Pear, new ItemStack(ItemHandler.PearJuice), 0.0F);
         this.addSmelting(ItemHandler.Strawberry, new ItemStack(ItemHandler.StrawberryJuice), 0.0F);
         this.addSmelting(ItemHandler.Cherry, new ItemStack(ItemHandler.CherryJuice), 0.0F);

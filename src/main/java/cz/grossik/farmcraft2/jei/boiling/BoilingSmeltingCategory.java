@@ -8,8 +8,12 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -53,14 +57,17 @@ public class BoilingSmeltingCategory extends BoilingRecipeCategory {
 
 	@Override
 	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        IGuiItemStackGroup gui_items = recipeLayout.getItemStacks();
 
-		guiItemStacks.init(inputSlot, true, 30, 17);
-		guiItemStacks.init(fuelSlot, true, 0, 17);
-		guiItemStacks.init(outputSlot, false, 90, 18);
+        gui_items.init(inputSlot, true, 30, 17);
+        gui_items.init(fuelSlot, true, 0, 17);
+        gui_items.init(outputSlot, false, 90, 18);
 
-		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
-		guiItemStacks.setFromRecipe(fuelSlot, new ItemStack(ItemHandler.Mash));
-		guiItemStacks.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
+	    List<ItemStack> input_a = new ArrayList<ItemStack>();
+	    input_a.add(new ItemStack(ItemHandler.Mash));
+	      
+	    gui_items.setFromRecipe(inputSlot, recipeWrapper.getInputs().get(0));
+	    gui_items.setFromRecipe(fuelSlot, recipeWrapper.getInputs().get(1));
+	    gui_items.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
 	}
 }

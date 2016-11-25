@@ -1,5 +1,6 @@
 package cz.grossik.farmcraft2;
 
+import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,15 +11,16 @@ public class FarmCraft2Tab extends CreativeTabs {
     public FarmCraft2Tab(String tabLabel) {
         super(tabLabel);
     }
+    
     @SideOnly(Side.CLIENT)
     public String getTranslatedTabLabel()
     {
-        return "FarmCraft 2 Tab";
+        return "FarmCraft 2";
     }
+    
     @Override
     @SideOnly(Side.CLIENT)
     public Item getTabIconItem() {
-        return cz.grossik.farmcraft2.handler.ItemHandler.TomatoSeeds;
+        return ItemHandler.TomatoSeeds;
     }
-
 }

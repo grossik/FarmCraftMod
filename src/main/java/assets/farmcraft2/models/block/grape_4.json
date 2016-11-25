@@ -1,0 +1,6 @@
+{
+    "parent": "block/crop",
+    "textures": {
+        "crop": "farmcraft2:blocks/grape_4"
+    }
+}

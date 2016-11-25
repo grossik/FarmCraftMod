@@ -1,5 +1,7 @@
 package cz.grossik.farmcraft2.juicer;
 
+import javax.annotation.Nullable;
+
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -28,51 +30,35 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
     private static final int[] slotsTop = new int[] {0};
     private static final int[] slotsBottom = new int[] {2, 1};
     private static final int[] slotsSides = new int[] {1};
-    /** The ItemStacks that hold the items currently being used in the furnace */
     private ItemStack[] furnaceItemStacks = new ItemStack[3];
-    /** The number of ticks that the furnace will keep burning */
     private int furnaceBurnTime;
-    /** The number of ticks that a fresh copy of the currently-burning item would keep the furnace burning for */
     private int currentItemBurnTime;
     private int cookTime;
     private int totalCookTime;
     private String furnaceCustomName;
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
     public int getSizeInventory()
     {
         return this.furnaceItemStacks.length;
     }
 
-    /**
-     * Returns the stack in the given slot.
-     */
     public ItemStack getStackInSlot(int index)
     {
         return this.furnaceItemStacks[index];
     }
 
-    /**
-     * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-     */
+    @Nullable
     public ItemStack decrStackSize(int index, int count)
     {
-        return ItemStackHelper.func_188382_a(this.furnaceItemStacks, index, count);
+        return ItemStackHelper.getAndSplit(this.furnaceItemStacks, index, count);
     }
 
-    /**
-     * Removes a stack from the given slot and returns it.
-     */
+    @Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        return ItemStackHelper.func_188383_a(this.furnaceItemStacks, index);
+        return ItemStackHelper.getAndRemove(this.furnaceItemStacks, index);
     }
 
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
     public void setInventorySlotContents(int index, ItemStack stack)
     {
         boolean flag = stack != null && stack.isItemEqual(this.furnaceItemStacks[index]) && ItemStack.areItemStackTagsEqual(stack, this.furnaceItemStacks[index]);
@@ -140,7 +126,7 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
         }
     }
 
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         compound.setInteger("BurnTime", this.furnaceBurnTime);
@@ -165,6 +151,7 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
         {
             compound.setString("CustomName", this.furnaceCustomName);
         }
+        return compound;
     }
 
     /**
@@ -304,9 +291,9 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
                 this.furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.sponge) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.bucket)
+            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.SPONGE) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.BUCKET)
             {
-                this.furnaceItemStacks[1] = new ItemStack(Items.water_bucket);
+                this.furnaceItemStacks[1] = new ItemStack(Items.WATER_BUCKET);
             }
 
             --this.furnaceItemStacks[0].stackSize;
@@ -379,7 +366,7 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
         else
         {
             ItemStack itemstack = this.furnaceItemStacks[1];
-            return isItemFuel(stack) || SlotJuicerFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.bucket);
+            return isItemFuel(stack) || SlotJuicerFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.BUCKET);
         }
     }
 
@@ -388,32 +375,18 @@ public class TileEntityJuicer extends TileEntityLockable implements ITickable, I
         return side == EnumFacing.DOWN ? slotsBottom : (side == EnumFacing.UP ? slotsTop : slotsSides);
     }
 
-    /**
-     * Returns true if automation can insert the given item in the given slot from the given side.
-     *  
-     * @param index The slot index to test insertion into
-     * @param itemStackIn The item to test insertion of
-     * @param direction The direction to test insertion from
-     */
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
     {
         return this.isItemValidForSlot(index, itemStackIn);
     }
 
-    /**
-     * Returns true if automation can extract the given item in the given slot from the given side.
-     *  
-     * @param index The slot index to test extraction from
-     * @param stack The item to try to extract
-     * @param direction The direction to extract from
-     */
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
         if (direction == EnumFacing.DOWN && index == 1)
         {
             Item item = stack.getItem();
 
-            if (item != Items.water_bucket && item != Items.bucket)
+            if (item != Items.WATER_BUCKET && item != Items.BUCKET)
             {
                 return false;
             }

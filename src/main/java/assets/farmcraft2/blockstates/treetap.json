@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south": { "model": "farmcraft2:treetap" },
+        "facing=west":  { "model": "farmcraft2:treetap", "y": 90},
+        "facing=north": { "model": "farmcraft2:treetap", "y": 180 },
+        "facing=east":  { "model": "farmcraft2:treetap", "y": 270 }
+    }
+}

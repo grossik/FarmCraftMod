@@ -41,4 +41,10 @@ public class CrushingRecipeHandler implements IRecipeHandler<CrushingRecipe> {
 		return true;
 	}
 
+	@Override
+	public String getRecipeCategoryUid(CrushingRecipe arg0) {
+		return "crushingoff";
+
+	}
+
 }

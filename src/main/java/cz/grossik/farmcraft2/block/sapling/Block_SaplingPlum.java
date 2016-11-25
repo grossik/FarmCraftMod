@@ -19,7 +19,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class Block_SaplingPlum extends BlockSapling {
 
 	public Block_SaplingPlum() {
-		setStepSound(SoundType.PLANT);
+		this.setSoundType(SoundType.PLANT);
 		setCreativeTab(Main.FarmCraft2Tab);
 	}
 
@@ -27,7 +27,7 @@ public class Block_SaplingPlum extends BlockSapling {
 	{
 		if (!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(world, random, pos)) return;
 
-		world.setBlockState(pos, Blocks.air.getDefaultState(), 1);
+		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
 		Object obj = new WorldGenPlumTree(true);
 		if(!((WorldGenerator) obj).generate(world, random, pos))
 			world.setBlockState(pos, getDefaultState(), 4);

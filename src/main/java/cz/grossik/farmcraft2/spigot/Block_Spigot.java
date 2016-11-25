@@ -1,10 +1,11 @@
 package cz.grossik.farmcraft2.spigot;
 
 import cz.grossik.farmcraft2.Main;
-import cz.grossik.farmcraft2.block.BlockFC2SidedMachine;
 import cz.grossik.farmcraft2.handler.FC2_GuiHandler;
+import cz.grossik.farmcraft2.util.BlockFC2SidedMachine;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +20,7 @@ public class Block_Spigot extends BlockFC2SidedMachine
 
   public Block_Spigot()
   {
-    super(Material.rock);
+    super(Material.ROCK);
   }
 
   @Override

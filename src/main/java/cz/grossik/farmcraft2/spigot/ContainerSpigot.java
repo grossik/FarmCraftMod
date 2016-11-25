@@ -13,9 +13,7 @@ public class ContainerSpigot extends Container
   
   // Slot numbers
   public static final int SLOTS_TE = 0;
-  public static final int SLOTS_TE_SIZE = 14;
-  private static final int SLOTS_TE_MOLD_STORAGE = 5;
-  private static final int SLOTS_TE_MOLD_STORAGE_SIZE = 9;
+  public static final int SLOTS_TE_SIZE = 4;
   public static final int SLOTS_INVENTORY = 14;
   private static final int SLOTS_HOTBAR = 14 + 3 * 9;
 
@@ -35,7 +33,7 @@ public class ContainerSpigot extends Container
     int i,j;
 
     addSlotToContainer(new SlotOutput(te_caster, TileEntitySpigot.INVENTORY_OUTPUT, 86, 51));
-    addSlotToContainer(new Slot(te_caster, TileEntitySpigot.INVENTORY_MOLD, 86, 21));
+    addSlotToContainer(new Slot(te_caster, TileEntitySpigot.INVENTORY_INPUT, 86, 21));
     addSlotToContainer(new SlotFluidContainer(te_caster, TileEntitySpigot.INVENTORY_CONTAINER_DRAIN, 11, 21));
     addSlotToContainer(new SlotFluidContainer(te_caster, TileEntitySpigot.INVENTORY_CONTAINER_FILL, 11, 51));
 

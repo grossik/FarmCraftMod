@@ -28,7 +28,7 @@ public class Block_Pineapple extends BlockCrops{
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return CROPS_AABB[((Integer)state.getValue(this.getAge())).intValue()];
+        return CROPS_AABB[((Integer)state.getValue(this.getAgeProperty())).intValue()];
     }
     
     public boolean setBlockPineapple(World par1World, BlockPos pos) {
@@ -36,7 +36,11 @@ public class Block_Pineapple extends BlockCrops{
     }
 
     public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
-        this.dropBlockAsItem(worldIn, pos, worldIn.getBlockState(pos), 7);
-        this.setBlockPineapple(worldIn, pos);
+        int i = this.getAge(worldIn.getBlockState(pos));
+
+    	if(i == this.getMaxAge()){
+    		this.dropBlockAsItem(worldIn, pos, worldIn.getBlockState(pos), 7);
+    		this.setBlockPineapple(worldIn, pos);
+    	}	
     }
 }

@@ -98,15 +98,5 @@ public class SlotJuicerOutput extends Slot
         this.field_75228_b = 0;
 
         net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, stack);
-
-        if (stack.getItem() == Items.iron_ingot)
-        {
-            this.thePlayer.addStat(AchievementList.acquireIron);
-        }
-
-        if (stack.getItem() == Items.cooked_fish)
-        {
-            this.thePlayer.addStat(AchievementList.cookFish);
-        }
     }
 }

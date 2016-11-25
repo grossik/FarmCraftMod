@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	@SideOnly(Side.CLIENT)
 	public class RendererCrushing extends TileEntitySpecialRenderer<TileEntityCrushing>
 	{
-	    private static final ResourceLocation SIGN_TEXTURE = new ResourceLocation("farmcraft2:textures/entity/crushing.png");
+	    private static final ResourceLocation CRUSHING_TEXTURE = new ResourceLocation("farmcraft2:textures/entity/crushing.png");
 	    private final ModelCrushing model = new ModelCrushing();
 
 	    public void renderTileEntityAt(TileEntityCrushing te, double x, double y, double z, float partialTicks, int destroyStage)
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	            i = te.getBlockMetadata();
 	        }
 	        
-	        if (block == BlockHandler.CrushingOff)
+	        if (block == BlockHandler.CrushingOff || block == BlockHandler.CrushingOn)
 	        {
 	            GlStateManager.translate((float)x + 0.5F, (float)y + 1.5F, (float)z + 0.5F);
 	            
@@ -42,9 +42,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 		        	this.model.drtic2.showModel = true;
 		        	this.model.drtic3.showModel = true;
 		        	this.model.drtic4.showModel = true;
-		        	this.model.drtic5.showModel = true;
+		        	this.model.drtic5.showModel = true;		        	
 	        }
-	        
+
 	        if (destroyStage >= 0)
 	        {
 	            this.bindTexture(DESTROY_STAGES[destroyStage]);
@@ -56,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	        }
 	        else
 	        {
-	            this.bindTexture(SIGN_TEXTURE);
+	            this.bindTexture(CRUSHING_TEXTURE);
 	        }
 	        
 	        int j = 0;
@@ -86,12 +86,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	        GlStateManager.enableRescaleNormal();
 	        GlStateManager.pushMatrix();
 	        GlStateManager.scale(1.0F, -1.0F, -1.0F);
-	        this.model.render();
+	        this.model.render(te, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 	        GlStateManager.popMatrix();
 	        FontRenderer fontrenderer = this.getFontRenderer();
 	        float f3 = 0.015625F * f;
 	        GlStateManager.translate(0.0F, 1.0F, 0.07F * f);
-	        //GlStateManager.scale(f3, -f3, f3);
 	        GlStateManager.glNormal3f(0.0F, 0.0F, -1.0F * f3);
 	        GlStateManager.depthMask(false);
 	        GlStateManager.depthMask(true);

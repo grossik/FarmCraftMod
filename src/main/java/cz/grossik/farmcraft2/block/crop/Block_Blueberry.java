@@ -4,13 +4,14 @@ import cz.grossik.farmcraft2.handler.BlockHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCarrot;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class Block_Blueberry extends BlockCarrot {
+public class Block_Blueberry extends BlockCrops {
     public Block_Blueberry() {
 
     }
@@ -28,7 +29,11 @@ public class Block_Blueberry extends BlockCarrot {
     }
 
     public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
-        this.dropBlockAsItem(worldIn, pos, worldIn.getBlockState(pos), 7);
-        this.setBlockBlueberry(worldIn, pos);
+        int i = this.getAge(worldIn.getBlockState(pos));
+
+    	if(i == this.getMaxAge()){
+    		this.dropBlockAsItem(worldIn, pos, worldIn.getBlockState(pos), 7);
+        	this.setBlockBlueberry(worldIn, pos);
+    	}
     }
 }

@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=south": { "model": "farmcraft2:homer_statue", "y": 0  },
+        "facing=north": { "model": "farmcraft2:homer_statue", "y": 180 },
+        
+        "facing=west":  { "model": "farmcraft2:homer_statue", "y": 90},
+        "facing=east":  { "model": "farmcraft2:homer_statue", "y": 270 }
+    }
+}

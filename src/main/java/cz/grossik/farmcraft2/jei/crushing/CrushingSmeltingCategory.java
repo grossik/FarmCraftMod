@@ -36,7 +36,6 @@ public class CrushingSmeltingCategory extends CrushingRecipeCategory {
 
 	@Override
 	public void drawAnimations(@Nonnull Minecraft minecraft) {
-		flame.draw(minecraft, 2, 20);
 		arrow.draw(minecraft, 24, 18);
 	}
 

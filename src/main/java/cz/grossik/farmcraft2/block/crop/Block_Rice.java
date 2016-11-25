@@ -25,6 +25,6 @@ public class Block_Rice extends BlockCrops{
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return CROPS_AABB[((Integer)state.getValue(this.getAge())).intValue()];
+        return CROPS_AABB[((Integer)state.getValue(this.getAgeProperty())).intValue()];
     }
 }

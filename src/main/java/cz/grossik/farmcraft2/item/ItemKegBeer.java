@@ -4,33 +4,43 @@ import java.util.List;
 import java.util.Map;
 
 import cz.grossik.farmcraft2.Main;
+import cz.grossik.farmcraft2.fluid.FC2Fluid;
+import cz.grossik.farmcraft2.handler.BlockHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemKegBeer extends Item implements IFluidContainerItem
 {
   public final int capacity;
-  
+
   public ItemKegBeer(int container_capacity)
   {
     super();
@@ -101,7 +111,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     Map<String, Fluid> fluids = FluidRegistry.getRegisteredFluids();
     for(Fluid f : fluids.values())
     {
-        if(f == Main.liquid_beer)
+        if(f == FC2Fluid.liquid_beer)
         {
             list.add(fromFluidStack(new FluidStack(f, capacity)));
         }
@@ -150,187 +160,8 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     }
     return false;
   }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
-  {
-    FluidStack fluid = getFluid(stack);
-    RayTraceResult obj = rayTrace(world, player, fluid == null || fluid.amount == 0);
-    
-    if(obj == null)
-    {
-      return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-    }
-    if(obj.typeOfHit == RayTraceResult.Type.BLOCK)
-    {
-      TileEntity entity = world.getTileEntity(obj.getBlockPos());
-      
-      if(entity instanceof IFluidHandler)
-      {
-        IFluidHandler handler = (IFluidHandler)entity;
-        if(player.isSneaking())
-        {
-          //Drain from container to the Tile Entity.
-          
-          FluidStack drained = drain(stack, 50, false);
-          if(drained == null || drained.amount == 0)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          int filled = handler.fill(obj.sideHit, drained, false);
-          if(filled == 0)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          drained.amount = filled;
-          
-          drain(stack, filled, true);
-          handler.fill(obj.sideHit, drained, true);
-        } else
-        {
-          //Fill container from the Tile Entity.
 
-          FluidStack drained = handler.drain(obj.sideHit, 50, false);
-          if(drained == null || drained.amount == 0)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          int filled = fill(stack, drained, false, true);
-          if(filled == 0)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          if(!splitStack(stack,player))
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          drained.amount = filled;
-          handler.drain(obj.sideHit, filled, true);
-          fill(stack, drained, true, false);
-        }
-        
-        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-      }
-      
-      if(!world.canMineBlockBody(player, obj.getBlockPos()))
-      {
-        return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-      }
-
-      if(player.isSneaking())
-      {
-        BlockPos pos = obj.getBlockPos().add(obj.sideHit.getDirectionVec());
-
-        if(!player.canPlayerEdit(pos, obj.sideHit, stack))
-        {
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-
-        Material material = world.getBlockState(pos).getMaterial();
-        
-        if(world.isAirBlock(pos) || !material.isSolid())
-        {
-          //Place fluid in the world.
-          
-          FluidStack drained = drain(stack, FluidContainerRegistry.BUCKET_VOLUME, false);
-          if(drained != null && drained.getFluid().canBePlacedInWorld() && drained.amount == FluidContainerRegistry.BUCKET_VOLUME)
-          {
-            drain(stack, FluidContainerRegistry.BUCKET_VOLUME, true);
-            if(!world.isRemote && !material.isLiquid())
-            {
-              world.destroyBlock(pos, true);
-            }
-            Block block = drained.getFluid().getBlock();
-            if(block == Blocks.lava)
-            {
-              block = Blocks.flowing_water;
-            }
-            if(block == Blocks.lava)
-            {
-              block = Blocks.flowing_lava;
-            }
-            world.setBlockState(pos, block.getDefaultState());
-          }
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-
-      } else
-      {
-        BlockPos pos = obj.getBlockPos();
-        //Drain fluid from the world.
-
-        if(!player.canPlayerEdit(pos, obj.sideHit, stack))
-        {
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-        
-        IBlockState state = world.getBlockState(pos);
-        
-        if(state.getBlock() instanceof IFluidBlock)
-        {
-          IFluidBlock fluid_block = (IFluidBlock)state.getBlock();
-          if(!fluid_block.canDrain(world, pos))
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          FluidStack drained = fluid_block.drain(world, pos, false);
-          if(drained == null)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          int filled = fill(stack, drained, false, true);
-          if(filled != drained.amount)
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          if(!splitStack(stack,player))
-          {
-            return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-          }
-          fluid_block.drain(world, pos, true);
-          fill(stack, drained, true, false);
-          
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-
-        if(state.getMaterial() == Material.water && Integer.valueOf(0).equals(state.getValue(BlockLiquid.LEVEL)))
-        {
-          FluidStack fill = new FluidStack(FluidRegistry.WATER,FluidContainerRegistry.BUCKET_VOLUME);
-          if(fill(stack, fill, false, true) == FluidContainerRegistry.BUCKET_VOLUME)
-          {
-            if(!splitStack(stack,player))
-            {
-              return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-            }
-            fill(stack, fill, true, false);
-            world.setBlockToAir(pos);
-          }
-
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-
-        if(state.getMaterial() == Material.lava && Integer.valueOf(0).equals(state.getValue(BlockLiquid.LEVEL)))
-        {
-          FluidStack fill = new FluidStack(FluidRegistry.LAVA,FluidContainerRegistry.BUCKET_VOLUME);
-          if(fill(stack, fill, false, true) == FluidContainerRegistry.BUCKET_VOLUME)
-          {
-            if(!splitStack(stack,player))
-            {
-              return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-            }
-            fill(stack, fill, true, false);
-            world.setBlockToAir(pos);
-          }
-
-          return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-        }
-      }
-    }
-    return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
-  }
-  
-  private RayTraceResult rayTrace(World world, EntityPlayer player, boolean b) {
+  protected RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox){
 	return null;
   }
   
@@ -446,7 +277,7 @@ public class ItemKegBeer extends Item implements IFluidContainerItem
     FluidStack fluid = getFluid(stack);
     if(fluid == null)
     {
-      return 16;
+      return 1;
     }
     return 1;
   }

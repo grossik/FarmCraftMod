@@ -8,8 +8,12 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -59,9 +63,9 @@ public class JuicerSmeltingCategory extends JuicerRecipeCategory {
 		guiItemStacks.init(inputSlot, true, 0, 0);
 		guiItemStacks.init(fuelSlot, true, 0, 36);
 		guiItemStacks.init(outputSlot, false, 60, 18);
-
-		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
-		guiItemStacks.setFromRecipe(fuelSlot, new ItemStack(ItemHandler.GlassFJ));
+	      
+		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs().get(0));
+		guiItemStacks.setFromRecipe(fuelSlot, recipeWrapper.getInputs().get(1));
 		guiItemStacks.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
 	}
 }

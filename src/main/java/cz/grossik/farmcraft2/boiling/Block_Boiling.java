@@ -40,7 +40,7 @@ public class Block_Boiling extends BlockContainer
 
     public Block_Boiling(boolean isBurning)
     {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.isBurning = isBurning;
     }
@@ -104,7 +104,7 @@ public class Block_Boiling extends BlockContainer
 
             if (rand.nextDouble() < 0.1D)
             {
-                pos.playSound((double)state.getX() + 0.5D, (double)state.getY(), (double)state.getZ() + 0.5D, SoundEvents.block_furnace_fire_crackle, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                pos.playSound((double)state.getX() + 0.5D, (double)state.getY(), (double)state.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
             }
         }
     }

@@ -1,5 +1,7 @@
 package cz.grossik.farmcraft2.mashtun;
 
+import javax.annotation.Nullable;
+
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -54,20 +56,19 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
         return this.furnaceItemStacks[index];
     }
 
-    /**
-     * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
-     */
+    @Nullable
     public ItemStack decrStackSize(int index, int count)
     {
-        return ItemStackHelper.func_188382_a(this.furnaceItemStacks, index, count);
+        return ItemStackHelper.getAndSplit(this.furnaceItemStacks, index, count);
     }
 
     /**
      * Removes a stack from the given slot and returns it.
      */
+    @Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        return ItemStackHelper.func_188383_a(this.furnaceItemStacks, index);
+        return ItemStackHelper.getAndRemove(this.furnaceItemStacks, index);
     }
 
     /**
@@ -140,7 +141,7 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
         }
     }
 
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         compound.setInteger("BurnTime", this.furnaceBurnTime);
@@ -165,6 +166,7 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
         {
             compound.setString("CustomName", this.furnaceCustomName);
         }
+		return compound;
     }
 
     /**
@@ -304,9 +306,9 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
                 this.furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.sponge) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.bucket)
+            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.SPONGE) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.BUCKET)
             {
-                this.furnaceItemStacks[1] = new ItemStack(Items.water_bucket);
+                this.furnaceItemStacks[1] = new ItemStack(Items.WATER_BUCKET);
             }
 
             --this.furnaceItemStacks[0].stackSize;
@@ -379,7 +381,7 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
         else
         {
             ItemStack itemstack = this.furnaceItemStacks[1];
-            return isItemFuel(stack) || SlotMashTunFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.bucket);
+            return isItemFuel(stack) || SlotMashTunFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.BUCKET);
         }
     }
 
@@ -413,7 +415,7 @@ public class TileEntityMashTun extends TileEntityLockable implements ITickable, 
         {
             Item item = stack.getItem();
 
-            if (item != Items.water_bucket && item != Items.bucket)
+            if (item != Items.WATER_BUCKET && item != Items.BUCKET)
             {
                 return false;
             }

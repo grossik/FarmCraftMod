@@ -11,9 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class SlotFermentingBarrel extends Slot
 {
     private int slotIndex;
-    
-	public static boolean jetamcoldworts = false;
-    
+        
     public SlotFermentingBarrel(IInventory inventoryIn, int slotIndex, int xPosition, int yPosition)
     {
         super(inventoryIn, slotIndex, xPosition, yPosition);
@@ -63,14 +61,7 @@ public class SlotFermentingBarrel extends Slot
      */
     public boolean isItemValid(ItemStack stack)
     {
-    	if(stack.getItem() == ItemHandler.ColdWorts)
-    	{
-    		jetamcoldworts = true;
-    		return true;
-    	}else{
-    		jetamcoldworts = false;
-    		return true;
-    	}
+    	return true;
     }
 
     /**
@@ -172,7 +163,7 @@ public class SlotFermentingBarrel extends Slot
     @SideOnly(Side.CLIENT)
     public net.minecraft.util.ResourceLocation getBackgroundLocation()
     {
-        return (backgroundLocation == null ? net.minecraft.client.renderer.texture.TextureMap.locationBlocksTexture : backgroundLocation);
+        return (backgroundLocation == null ? net.minecraft.client.renderer.texture.TextureMap.LOCATION_BLOCKS_TEXTURE : backgroundLocation);
     }
 
     /**

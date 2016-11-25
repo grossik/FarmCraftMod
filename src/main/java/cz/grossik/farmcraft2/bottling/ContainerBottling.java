@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerBottling extends Container
 {
@@ -52,55 +51,74 @@ public class ContainerBottling extends Container
 
   public ItemStack transferStackInSlot(EntityPlayer player, int slot_index)
   {
-    ItemStack slot_stack = null;
-    Slot slot = (Slot) inventorySlots.get(slot_index);
+      ItemStack itemstack = null;
+      Slot slot = (Slot)this.inventorySlots.get(slot_index);
 
-    if (slot != null && slot.getHasStack())
-    {
-      ItemStack stack = slot.getStack();
-      slot_stack = stack.copy();
-
-      if (slot_index >= SLOTS_INVENTORY && slot_index < SLOTS_HOTBAR)
+      if (slot != null && slot.getHasStack())
       {
-        if(TileEntityFurnace.isItemFuel(stack))
-        {
-          int s = SLOTS_TE;
-          if(!mergeItemStack(stack, s, s + 1, false))
+          ItemStack itemstack1 = slot.getStack();
+          itemstack = itemstack1.copy();
+
+          if (slot_index == 2)
           {
-            return null;
-          } 
-        } else if(!mergeItemStack(stack, SLOTS_TE, SLOTS_TE + TileEntityBottling.SLOT_INPUT_B + 1, false))
-        {
-          return null;
-        }
-      } else if (slot_index >= SLOTS_HOTBAR && slot_index < SLOTS_HOTBAR + 9)
-      {
-        if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_INVENTORY + 3 * 9, false))
-        {
-          return null;
-        }
-      } else if (!mergeItemStack(stack, SLOTS_INVENTORY, SLOTS_HOTBAR + 9, false))
-      {
-        return null;
+              if (!this.mergeItemStack(itemstack1, 3, 39, true))
+              {
+                  return null;
+              }
+
+              slot.onSlotChange(itemstack1, itemstack);
+          }
+          else if (slot_index != 1 && slot_index != 0)
+          {
+              if (BottlingRecipeManager.instance.getRecipes() != null)
+              {
+                  if (!this.mergeItemStack(itemstack1, 0, 1, false))
+                  {
+                      return null;
+                  }
+              }
+              else if (TileEntityBottling.isItemFuel(itemstack1))
+              {
+                  if (!this.mergeItemStack(itemstack1, 1, 2, false))
+                  {
+                      return null;
+                  }
+              }
+              else if (slot_index >= 3 && slot_index < 30)
+              {
+                  if (!this.mergeItemStack(itemstack1, 30, 39, false))
+                  {
+                      return null;
+                  }
+              }
+              else if (slot_index >= 30 && slot_index < 39 && !this.mergeItemStack(itemstack1, 3, 30, false))
+              {
+                  return null;
+              }
+          }
+          else if (!this.mergeItemStack(itemstack1, 3, 39, false))
+          {
+              return null;
+          }
+
+          if (itemstack1.stackSize == 0)
+          {
+              slot.putStack((ItemStack)null);
+          }
+          else
+          {
+              slot.onSlotChanged();
+          }
+
+          if (itemstack1.stackSize == itemstack.stackSize)
+          {
+              return null;
+          }
+
+          slot.onPickupFromSlot(player, itemstack1);
       }
 
-      if (stack.stackSize == 0)
-      {
-        slot.putStack((ItemStack) null);
-      } else
-      {
-        slot.onSlotChanged();
-      }
-
-      if (stack.stackSize == slot_stack.stackSize)
-      {
-        return null;
-      }
-
-      slot.onPickupFromSlot(player, stack);
-    }
-
-    return slot_stack;
+      return itemstack;
   }
   
   

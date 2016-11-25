@@ -31,7 +31,7 @@ public class Block_LeavesPlum extends BlockLeaves {
 	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
-		return Blocks.leaves.isOpaqueCube(state);
+		return Blocks.LEAVES.isOpaqueCube(state);
 	}
 
 	@Override

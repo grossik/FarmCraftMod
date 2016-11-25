@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "farmcraft2:blocks/double_plant_purple_rose_top"
+    }
+}

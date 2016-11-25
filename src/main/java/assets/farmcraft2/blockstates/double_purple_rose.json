@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=lower": { "model": "farmcraft2:double_purple_rose_bottom" },
+        "half=upper": { "model": "farmcraft2:double_purple_rose_top" }
+    }
+}

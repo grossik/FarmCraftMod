@@ -1,0 +1,25 @@
+{
+    "kombajn": {
+        "category": "hostile",
+        "sounds": [
+            "farmcraft2:kombajn"
+        ],
+        "subtitle": "subtitle.kombajn"
+    },
+    
+    "goat_ambient": {
+        "category": "hostile",
+        "sounds": [
+            "farmcraft2:goat_ambient"
+        ],
+        "subtitle": "subtitle.goat.ambient"
+    },
+    
+    "tractor": {
+        "category": "hostile",
+        "sounds": [
+            "farmcraft2:traktor"
+        ],
+        "subtitle": "subtitle.tractor"
+    }    
+}

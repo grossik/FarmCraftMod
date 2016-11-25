@@ -2,18 +2,19 @@ package cz.grossik.farmcraft2.jei.juicer;
 
 import javax.annotation.Nonnull;
 
+import cz.grossik.farmcraft2.jei.juicer.JuicerRecipeMaker.Wrapper;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.util.ErrorUtil;
 import mezz.jei.util.Log;
 
-public class JuicerRecipeHandler implements IRecipeHandler<JuicerRecipe> {
+public class JuicerRecipeHandler implements IRecipeHandler<Wrapper> {
 
 	@Override
 	@Nonnull
-	public Class<JuicerRecipe> getRecipeClass() {
-		return JuicerRecipe.class;
+	public Class<Wrapper> getRecipeClass() {
+		return Wrapper.class;
 	}
 
 	@Nonnull
@@ -24,12 +25,12 @@ public class JuicerRecipeHandler implements IRecipeHandler<JuicerRecipe> {
 
 	@Override
 	@Nonnull
-	public IRecipeWrapper getRecipeWrapper(@Nonnull JuicerRecipe recipe) {
+	public IRecipeWrapper getRecipeWrapper(@Nonnull Wrapper recipe) {
 		return recipe;
 	}
 
 	@Override
-	public boolean isRecipeValid(@Nonnull JuicerRecipe recipe) {
+	public boolean isRecipeValid(@Nonnull Wrapper recipe) {
 		if (recipe.getInputs().isEmpty()) {
 			String recipeInfo = ErrorUtil.getInfoFromBrokenRecipe(recipe, this);
 			Log.error("Recipe has no inputs. {}", recipeInfo);
@@ -39,6 +40,12 @@ public class JuicerRecipeHandler implements IRecipeHandler<JuicerRecipe> {
 			Log.error("Recipe has no outputs. {}", recipeInfo);
 		}
 		return true;
+	}
+
+	@Override
+	public String getRecipeCategoryUid(Wrapper arg0) {
+		return "juiceroff";
+
 	}
 
 }

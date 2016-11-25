@@ -1,6 +1,5 @@
 package cz.grossik.farmcraft2.bottling;
 
-import cz.grossik.farmcraft2.bottling.Block_Bottling.EnumMachineLevel;
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -49,9 +48,12 @@ public class SlotInput extends Slot
 
     public boolean isItemValid(ItemStack stack)
     {
-    	if(stack.getItem() == ItemHandler.Bottle) {
+    	TileEntityBottling te = new TileEntityBottling();
+    	
+    	if(stack.getItem() == ItemHandler.KegOfBeer || stack.getItem() == ItemHandler.BottleFW) {
     		return true;
     	}
+    	
 		return false;
     }
 
@@ -120,7 +122,7 @@ public class SlotInput extends Slot
     @SideOnly(Side.CLIENT)
     public net.minecraft.util.ResourceLocation getBackgroundLocation()
     {
-        return (backgroundLocation == null ? net.minecraft.client.renderer.texture.TextureMap.locationBlocksTexture : backgroundLocation);
+        return (backgroundLocation == null ? net.minecraft.client.renderer.texture.TextureMap.LOCATION_BLOCKS_TEXTURE : backgroundLocation);
     }
 
 

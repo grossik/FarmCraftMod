@@ -6,7 +6,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotCrushing extends Slot {
-	
+		
 	public SlotCrushing(IInventory inventoryIn, int index, int xPosition, int yPosition) {
 		super(inventoryIn, index, xPosition, yPosition);
 	}
@@ -14,7 +14,9 @@ public class SlotCrushing extends Slot {
     public boolean isItemValid(ItemStack stack)
     {    	
     	if(stack.getItem() == ItemHandler.Wine)
-    	return true;
+    	{ 
+    		return true;
+    	}
     	
         return false;
     }

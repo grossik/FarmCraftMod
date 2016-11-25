@@ -1,6 +1,6 @@
 package cz.grossik.farmcraft2.bottling;
 
-import cz.grossik.farmcraft2.TileEntityFC;
+import cz.grossik.farmcraft2.util.TileEntityFC;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -71,12 +71,13 @@ public class TileEntityBottling extends TileEntityFC implements ISidedInventory/
   }
 
   @Override
-  public void writeToNBT(NBTTagCompound tag)
+  public NBTTagCompound writeToNBT(NBTTagCompound tag)
   {
     super.writeToNBT(tag);
     tag.setInteger("BurnTime", burn_time);
     tag.setInteger("CookTime", progress);
     tag.setInteger("ItemBurnTime", item_burn_time);
+	return tag;
   }
 
   @Override
@@ -151,7 +152,7 @@ public class TileEntityBottling extends TileEntityFC implements ISidedInventory/
   @Override
   public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side)
   {
-    return side != EnumFacing.UP || slot != SLOT_INPUT_A || slot != SLOT_INPUT_B || stack.getItem() == Items.bucket;
+    return side != EnumFacing.UP || slot != SLOT_INPUT_A || slot != SLOT_INPUT_B || stack.getItem() == Items.BUCKET;
   }
 
   @Override

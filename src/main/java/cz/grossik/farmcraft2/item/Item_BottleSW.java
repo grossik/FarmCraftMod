@@ -3,6 +3,7 @@ package cz.grossik.farmcraft2.item;
 import cz.grossik.farmcraft2.Main;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -38,8 +39,18 @@ public class Item_BottleSW extends ItemFood
     public boolean hasContainerItem(ItemStack itemStack)
     {
        return true;
-    }
+    }   
     
+	@Override
+	protected void onFoodEaten(ItemStack itemStack, World world, EntityPlayer entity){
+	    super.onFoodEaten(itemStack, world, entity);
+        
+	        if (!world.isRemote)
+	        	entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 900, 9));	   
+        	    entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 12));	    
+	    
+	}
+	
     @Override
     public ItemStack getContainerItem(ItemStack itemStack)
     {

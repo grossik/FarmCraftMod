@@ -85,7 +85,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 	        GlStateManager.enableRescaleNormal();
 	        GlStateManager.pushMatrix();
 	        GlStateManager.scale(0.5F, -0.5F, -0.5F);
-	        this.model.render();
+	        this.model.render(te, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 	        GlStateManager.popMatrix();
 	        FontRenderer fontrenderer = this.getFontRenderer();
 	        float f3 = 0.015625F * f;

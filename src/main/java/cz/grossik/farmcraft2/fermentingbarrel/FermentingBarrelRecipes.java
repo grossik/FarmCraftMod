@@ -28,7 +28,7 @@ public class FermentingBarrelRecipes
         return smeltingBase;
     }
 
-    private FermentingBarrelRecipes()
+    public FermentingBarrelRecipes()
     {
         this.addSmelting(ItemHandler.WineBucket, new ItemStack(ItemHandler.FermentedWine), 0.0F);
         

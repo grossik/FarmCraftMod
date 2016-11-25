@@ -99,14 +99,5 @@ public class SlotBoilingOutput extends Slot
 
         net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, stack);
 
-        if (stack.getItem() == Items.iron_ingot)
-        {
-            this.thePlayer.addStat(AchievementList.acquireIron);
-        }
-
-        if (stack.getItem() == Items.cooked_fish)
-        {
-            this.thePlayer.addStat(AchievementList.cookFish);
-        }
     }
 }

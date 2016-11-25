@@ -27,7 +27,7 @@ public class VillageFieldHandler implements IVillageCreationHandler {
 	@Override
 	public Village buildComponent(PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List<StructureComponent> pieces,
 			Random random, int p1, int p2, int p3, EnumFacing facing, int p5) {
-        return ComponentVillageField.func_175852_a(startPiece, pieces, random, p1, p2, p3, facing, p5);
+        return ComponentVillageField.createPiece(startPiece, pieces, random, p1, p2, p3, facing, p5);
 	}
 
 }

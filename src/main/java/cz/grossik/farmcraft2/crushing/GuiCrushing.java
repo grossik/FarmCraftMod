@@ -54,7 +54,7 @@ public class GuiCrushing extends GuiContainer
 
         if (TileEntityCrushing.isBurning(this.tileFurnace))
         {
-            int k = this.getBurnLeftScaled(13);
+            int k = this.getCookProgressScaled(24);
             this.drawTexturedModalRect(i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
 

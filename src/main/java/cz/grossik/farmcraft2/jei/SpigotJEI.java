@@ -8,12 +8,14 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Lists;
 
+import cz.grossik.farmcraft2.bottling.GuiBottling;
 import cz.grossik.farmcraft2.bottling.IItemMatcher;
 import cz.grossik.farmcraft2.spigot.GuiSpigot;
 import cz.grossik.farmcraft2.spigot.ISpigotRecipe;
 import cz.grossik.farmcraft2.spigot.SpigotRecipeManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -130,8 +132,11 @@ public class SpigotJEI
       background = guiHelper.createDrawable(location, 38, 16, 68, 54);
       tank_overlay = guiHelper.createDrawable(location, 176, 0, 16, 47);
       localizedName = Translator.translateToLocal("Spigot");
-
     }
+    
+	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+		registry.addRecipeClickArea(GuiSpigot.class, 60, 51, 22, 15, "spigot");
+	}
 
     @Override
     @Nonnull
@@ -212,6 +217,11 @@ public class SpigotJEI
     {
       return true;
     }
+
+	@Override
+	public String getRecipeCategoryUid(Wrapper arg0) {
+	      return "spigot";
+	}
   }
 
   static public List<Wrapper> getRecipes()

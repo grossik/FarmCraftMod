@@ -1,5 +1,6 @@
 package cz.grossik.farmcraft2.bottling;
 
+import cz.grossik.farmcraft2.crushing.TileEntityCrushing;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -85,8 +86,9 @@ public class ModelBottling extends ModelBase
     setRotation(staceni4, 0F, 0F, 0F);
   }
   
-  public void render()
+  public void render(TileEntityBottling te, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
   {
+	this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, te);
 	float f5 = 0.0625F;
     dole.render(f5);
     j1.render(f5);
@@ -105,5 +107,12 @@ public class ModelBottling extends ModelBase
     model.rotateAngleX = x;
     model.rotateAngleY = y;
     model.rotateAngleZ = z;
+  }
+  
+  private double angle;
+  private int state;
+  
+  public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, TileEntityBottling entityIn)
+  {
   }
 }

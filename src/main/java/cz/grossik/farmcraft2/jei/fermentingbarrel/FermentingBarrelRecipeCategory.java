@@ -2,12 +2,16 @@ package cz.grossik.farmcraft2.jei.fermentingbarrel;
 
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+
+import cz.grossik.farmcraft2.bottling.GuiBottling;
+import cz.grossik.farmcraft2.fermentingbarrel.GuiFermentingBarrel;
 
 public abstract class FermentingBarrelRecipeCategory extends BlankRecipeCategory {
 	protected static final int inputSlot = 0;
@@ -32,5 +36,9 @@ public abstract class FermentingBarrelRecipeCategory extends BlankRecipeCategory
 
 		IDrawableStatic arrowDrawable = guiHelper.createDrawable(backgroundLocation, 176, 14, 24, 17);
 		this.arrow = guiHelper.createAnimatedDrawable(arrowDrawable, 300, IDrawableAnimated.StartDirection.LEFT, false);
+	}
+	
+	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+		registry.addRecipeClickArea(GuiFermentingBarrel.class, 80, 35, 22, 15, "fermentingbarreloff");
 	}
 }

@@ -22,9 +22,9 @@ public class Block_Radish extends BlockCrops{
     {
         return ItemHandler.Radish;
     }
-
+    
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return CROPS_AABB[((Integer)state.getValue(this.getAge())).intValue()];
+        return CROPS_AABB[((Integer)state.getValue(this.getAgeProperty())).intValue()];
     }
 }

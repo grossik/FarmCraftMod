@@ -1,6 +1,7 @@
 package cz.grossik.farmcraft2.backpack;
 
 import cz.grossik.farmcraft2.Main;
+import cz.grossik.farmcraft2.event.FC2VersionEvent.Color;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,6 +41,7 @@ public class GuiBackpack extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
-        this.fontRendererObj.drawString(I18n.translateToLocal("Backpack"), 8, 6, 4210752);
+        this.fontRendererObj.drawString(I18n.translateToLocal(Color.GOLD + "Backpack"), 8, 6, 4210752);
+        this.fontRendererObj.drawString(Color.GOLD + this.player.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 }

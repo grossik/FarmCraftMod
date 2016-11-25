@@ -1,23 +1,5 @@
 {
     "variants": {
-        "facing=north,level=0,state=off": { "model": "farmcraft2:bottlingoff" },
-        "facing=south,level=0,state=off": { "model": "farmcraft2:bottlingoff", "y": 180 },
-        "facing=west,level=0,state=off":  { "model": "farmcraft2:bottlingoff", "y": 270 },
-        "facing=east,level=0,state=off":  { "model": "farmcraft2:bottlingoff", "y": 90 },
-            
-        "facing=north,level=1,state=off": { "model": "test:test_level1" },
-        "facing=south,level=1,state=off": { "model": "test:test_level1", "y": 180 },
-        "facing=west,level=1,state=off":  { "model": "test:test_level1", "y": 270 },
-        "facing=east,level=1,state=off":  { "model": "test:test_level1", "y": 90 },
-        
-        "facing=north,level=0,state=on": { "model": "farmcraft2:bottlingoff" },
-        "facing=south,level=0,state=on": { "model": "farmcraft2:bottlingoff", "y": 180 },
-        "facing=west,level=0,state=on":  { "model": "farmcraft2:bottlingoff", "y": 270 },
-        "facing=east,level=0,state=on":  { "model": "farmcraft2:bottlingoff", "y": 90 },
-        
-        "facing=north,level=1,state=on": { "model": "test:test_level1" },
-        "facing=south,level=1,state=on": { "model": "test:test_level1", "y": 180 },
-        "facing=west,level=1,state=on":  { "model": "test:test_level1", "y": 270 },
-        "facing=east,level=1,state=on":  { "model": "test:test_level1", "y": 90 }        
+        "normal": { "model": "farmcraft2:bottling" }
     }
 }

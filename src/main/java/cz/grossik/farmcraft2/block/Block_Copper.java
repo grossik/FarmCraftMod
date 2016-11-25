@@ -6,6 +6,6 @@ import net.minecraft.block.material.Material;
 public class Block_Copper extends Block {
 
     public Block_Copper() {
-        super(Material.rock);
+        super(Material.ROCK);
     }
 }

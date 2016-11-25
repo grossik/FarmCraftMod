@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "farmcraft2:blocks/double_plant_pink_rose_top"
+    }
+}

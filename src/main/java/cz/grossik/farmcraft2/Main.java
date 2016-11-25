@@ -1,35 +1,46 @@
 package cz.grossik.farmcraft2;
 
+import com.google.common.eventbus.Subscribe;
+
+import cz.grossik.farmcraft2.combine.EntityCombine;
+import cz.grossik.farmcraft2.combine.RenderCombine;
+import cz.grossik.farmcraft2.easteregg.EntityHomer;
+import cz.grossik.farmcraft2.easteregg.RenderHomer;
+import cz.grossik.farmcraft2.event.FC2VersionEvent;
+import cz.grossik.farmcraft2.event.FarmCraft2Event;
+import cz.grossik.farmcraft2.fluid.FC2Fluid;
+import cz.grossik.farmcraft2.goat.EntityGoat;
+import cz.grossik.farmcraft2.goat.RenderGoat;
 import cz.grossik.farmcraft2.handler.BlockHandler;
+import cz.grossik.farmcraft2.handler.ConfigHandler;
 import cz.grossik.farmcraft2.handler.FC2_GuiHandler;
 import cz.grossik.farmcraft2.handler.ItemHandler;
-import cz.grossik.farmcraft2.liquid.BeerRegistry;
+import cz.grossik.farmcraft2.tractor.EntityTractor;
+import cz.grossik.farmcraft2.tractor.RenderTractor;
+import cz.grossik.farmcraft2.util.MessageTileEntitySync;
 import cz.grossik.farmcraft2.wordgen.BiomeGenFC2Tree;
 import cz.grossik.farmcraft2.wordgen.WordGen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -40,29 +51,30 @@ import net.minecraftforge.oredict.OreDictionary;
 public class Main
 {
     public static final String MODID = "farmcraft2";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1.1";
     
     @Instance(MODID)
     public static Main instance;
     @SidedProxy(clientSide = "cz.grossik.farmcraft2.ProxyClient", serverSide = "cz.grossik.farmcraft2.ProxyCommon")
-    public static cz.grossik.farmcraft2.ProxyCommon proxy;
+    public static ProxyCommon proxy;
     
     public static SimpleNetworkWrapper network_channel;
     
     public static CreativeTabs FarmCraft2Tab = new FarmCraft2Tab("FarmCraft 2");
     
-    public static BiomeGenBase FC2TreeBiome = new BiomeGenFC2Tree(false, (new BiomeGenBase.BiomeProperties("Fruit Biome")).setBaseHeight(0.125F).setHeightVariation(0.05F).setTemperature(0.8F).setRainfall(0.4F));
-    
-    public static Fluid liquid_beer;
+    public static Biome FC2TreeBiome = new BiomeGenFC2Tree(false, (new Biome.BiomeProperties("Fruit Biome")).setBaseHeight(0.125F).setHeightVariation(0.05F).setTemperature(0.8F).setRainfall(0.4F));
+           
+    public FC2Sounds sounds;
     
     public Main()
-    {
-        liquid_beer = BeerRegistry.instance.registerLiquidMetal("beer", 700, 15);
-
+    {    	
+    	FC2Fluid.instance.registerFluids();
+    	
     	//Register Block
     	GameRegistry.registerBlock(BlockHandler.Corn, "cornblock");
     	GameRegistry.registerBlock(BlockHandler.TomatoBlock, "tomatoblock");
     	GameRegistry.registerBlock(BlockHandler.Scarecrow, "scarecrow");
+    	GameRegistry.registerBlock(BlockHandler.ScarecrowTop, "scarecrow_top");
     	GameRegistry.registerBlock(BlockHandler.CheeseBlock, "cheeseblock");
         GameRegistry.registerBlock(BlockHandler.RadishBlock, "radishblock");
         GameRegistry.registerBlock(BlockHandler.BroccoliBlock, "broccoliblock");
@@ -95,12 +107,27 @@ public class Main
         GameRegistry.registerBlock(BlockHandler.BoilingOn, "boilingon");
         GameRegistry.registerBlock(BlockHandler.BottlingOff, "bottlingoff");
         GameRegistry.registerBlock(BlockHandler.WineBlock, "grapeblock");
-        GameRegistry.registerBlock(BlockHandler.CrushingOff, "crushingOff");
-        GameRegistry.registerBlock(BlockHandler.CrushingOn, "crushingOn");
+        GameRegistry.registerBlock(BlockHandler.CrushingOff, "crushingoff");
+        GameRegistry.registerBlock(BlockHandler.CrushingOn, "crushingon");
         GameRegistry.registerBlock(BlockHandler.FermentingBarrelOff, "fermentingbarreloff");
         GameRegistry.registerBlock(BlockHandler.FermentingBarrelOn, "fermentingbarrelon");
         GameRegistry.registerBlock(BlockHandler.spigot, "spigot");
-        
+        GameRegistry.registerBlock(BlockHandler.HomerStatue, "statue_homer");
+        GameRegistry.registerBlock(BlockHandler.HomerStatueTop, "statue_homer_top");
+        GameRegistry.registerBlock(BlockHandler.leavesBananaNormal, "leavesbn");
+        GameRegistry.registerBlock(BlockHandler.leavesBananaSB, "leavesbananaplne");
+        GameRegistry.registerBlock(BlockHandler.SaplingBanana, "saplingBanana");    
+        GameRegistry.registerBlock(BlockHandler.Pan, "pan");    
+    	GameRegistry.registerBlock(BlockHandler.Treetap, "treetap");   
+        GameRegistry.registerBlock(BlockHandler.MapleLeaves, "maple_leaves");
+        GameRegistry.registerBlock(BlockHandler.SaplingMaple, "saplingMaple");
+        GameRegistry.registerBlock(BlockHandler.MapleWood, "maple_wood");
+        GameRegistry.registerBlock(BlockHandler.MarijuanaBlock, "marijuanablock");
+
+        //Register ItemBlock
+        register(BlockHandler.Rose, ItemHandler.ItemBlockRose, "fc_rose");
+        register(BlockHandler.Lily, ItemHandler.ItemBlockLily, "lily");
+
     	//Register Item
     	GameRegistry.registerItem(ItemHandler.Corn_flakes, "Corn_flakes");
        	GameRegistry.registerItem(ItemHandler.Corn_Seed, "Corn_Seed");
@@ -113,7 +140,6 @@ public class Main
         GameRegistry.registerItem(ItemHandler.BroccoliSeeds, "broccoliseeds");
         GameRegistry.registerItem(ItemHandler.BucketCurd, "curd");
         GameRegistry.registerItem(ItemHandler.CheeseItem, "cheese");
-        GameRegistry.registerItem(ItemHandler.ScarecrowItem, "scarecrow_item");
         GameRegistry.registerItem(ItemHandler.Pear, "pear");
         GameRegistry.registerItem(ItemHandler.CucumberSeeds, "cucumberseeds");
         GameRegistry.registerItem(ItemHandler.Cucumber, "cucumber");
@@ -182,7 +208,42 @@ public class Main
         GameRegistry.registerItem(ItemHandler.BottleFW, "bottlefw");
         GameRegistry.registerItem(ItemHandler.BottleSW, "bottlesw");
         GameRegistry.registerItem(ItemHandler.KegOfBeer, "kegofbeer");
-        
+        GameRegistry.registerItem(ItemHandler.Cornflakes_with_milk, "cornlakes_with_milk");
+        GameRegistry.registerItem(ItemHandler.StrawberryJam, "strawberryjam");
+        GameRegistry.registerItem(ItemHandler.ToastWSJ, "toastwithstrawberryjam");
+        GameRegistry.registerItem(ItemHandler.Salad, "salad");
+        GameRegistry.registerItem(ItemHandler.Chocolate, "chocolate");
+        GameRegistry.registerItem(ItemHandler.HotChocolateBucket, "hotchocolatebucket");
+        GameRegistry.registerItem(ItemHandler.MaP, "mortar_and_pestle");
+        GameRegistry.registerItem(ItemHandler.Flour, "flour");
+        GameRegistry.registerItem(ItemHandler.DfD, "dough_for_donuts");
+        GameRegistry.registerItem(ItemHandler.Donuts, "donuts");
+        GameRegistry.registerItem(ItemHandler.Banana, "banana");
+        GameRegistry.registerItem(ItemHandler.FillingDonuts, "filling_donuts");
+        GameRegistry.registerItem(ItemHandler.PizzaDough, "pizza_dough");
+        GameRegistry.registerItem(ItemHandler.PizzaDoughTomato, "pizza_dough_tomato");
+        GameRegistry.registerItem(ItemHandler.Pizza, "pizza");
+        GameRegistry.registerItem(ItemHandler.CookedPizza, "cooked_pizza");
+        GameRegistry.registerItem(ItemHandler.Ham, "ham");
+        GameRegistry.registerItem(ItemHandler.PearYoghurt, "pearyoghurt");
+        GameRegistry.registerItem(ItemHandler.MagicHoe, "magic_hoe");
+        GameRegistry.registerItem(ItemHandler.DfPancakes, "dough_for_pancakes");
+        GameRegistry.registerItem(ItemHandler.Pancakes, "pancakes");
+    	GameRegistry.registerItem(ItemHandler.ITreetap, "itreetap");   
+    	GameRegistry.registerItem(ItemHandler.SapBucket, "sap_bucket");   
+    	GameRegistry.registerItem(ItemHandler.MapleSyrup, "maple_syrup");   
+    	GameRegistry.registerItem(ItemHandler.PancakesWithSyrup, "pancakes_with_syrup");   
+    	GameRegistry.registerItem(ItemHandler.PancakesWithJam, "pancakes_with_jam");   
+    	GameRegistry.registerItem(ItemHandler.Marijuana, "marijuana");   
+    	GameRegistry.registerItem(ItemHandler.MarijuanaSeeds, "marijuanaseeds");  
+    	GameRegistry.registerItem(ItemHandler.Joint, "joint");  
+    	GameRegistry.registerItem(ItemHandler.ItemCombine, "item_combine");  
+    	GameRegistry.registerItem(ItemHandler.Wheels, "wheels");  
+    	GameRegistry.registerItem(ItemHandler.Headers, "headers");  
+    	GameRegistry.registerItem(ItemHandler.Cab, "cab");  
+    	GameRegistry.registerItem(ItemHandler.GoatMilkBucket, "goat_milk_bucket");
+    	GameRegistry.registerItem(ItemHandler.ItemTractor, "item_tractor");
+
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.TomatoSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.RadishSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.BroccoliSeeds), 7);
@@ -196,155 +257,20 @@ public class Main
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.BlueberrySeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.PineappleSeeds), 7);
         MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.WineSeeds), 7);
-        MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.Corn_Seed), 7);
+        MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.Corn_Seed), 7);       
+        MinecraftForge.addGrassSeed(new ItemStack(ItemHandler.MarijuanaSeeds), 7);    
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     { 
-    	FarmCraft2Recipe.init();
-    	
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
-        //Block\\
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.CheeseBlock), 0, new ModelResourceLocation(MODID + ":" + "cheeseblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Scarecrow), 0, new ModelResourceLocation(MODID + "scarecrow", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BlockCopper), 0, new ModelResourceLocation(MODID + ":" + "blockcopper", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.OreCopper), 0, new ModelResourceLocation(MODID + ":" + "orecopper", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.AppleCakeBlock), 0, new ModelResourceLocation(MODID + ":" + "applecakeblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.juicerOff), 0, new ModelResourceLocation(MODID + ":" + "juiceroff", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.juicerOn), 0, new ModelResourceLocation(MODID + ":" + "juiceron", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BottlingOff), 0, new ModelResourceLocation(MODID + ":" + "bottlingoff", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPearNormal), 0, new ModelResourceLocation(MODID + ":" + "leavespn", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPear), 0, new ModelResourceLocation(MODID + ":" + "saplingPear", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPearSH), 0, new ModelResourceLocation(MODID + ":" + "leavespearplne", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesCherryNormal), 0, new ModelResourceLocation(MODID + ":" + "leavesCH", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingCherry), 0, new ModelResourceLocation(MODID + ":" + "saplingCherry", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesCherryST), 0, new ModelResourceLocation(MODID + ":" + "leavescherryplne", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumNormal), 0, new ModelResourceLocation(MODID + ":" + "leavesPL", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.SaplingPlum), 0, new ModelResourceLocation(MODID + ":" + "saplingPlum", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.leavesPlumSS), 0, new ModelResourceLocation(MODID + ":" + "leavesplumplne", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.spigot), 0, new ModelResourceLocation(MODID + ":" + "spigot", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.MashTunOff), 0, new ModelResourceLocation(MODID + ":" + "mashtunoff", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.MashTunOn), 0, new ModelResourceLocation(MODID + ":" + "mashtunon", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BoilingOff), 0, new ModelResourceLocation(MODID + ":" + "boilingoff", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BoilingOn), 0, new ModelResourceLocation(MODID + ":" + "boilingon", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.FermentingBarrelOff), 0, new ModelResourceLocation(MODID + ":" + "fermentingbarreloff", "inventory"));
-
-        //Crop        
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.Corn), 0, new ModelResourceLocation(MODID + ":" + "cornblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.TomatoBlock), 0, new ModelResourceLocation(MODID + ":" + "tomatoblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.RadishBlock), 0, new ModelResourceLocation(MODID + ":" + "radishblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BroccoliBlock), 0, new ModelResourceLocation(MODID + ":" + "broccoliblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.CucumberBlock), 0, new ModelResourceLocation(MODID + ":" + "cucumberblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.RiceBlock), 0, new ModelResourceLocation(MODID + ":" + "riceblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.CapsicumBlock), 0, new ModelResourceLocation(MODID + ":" + "capsicumblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.CabbageBlock), 0, new ModelResourceLocation(MODID + ":" + "cabbageblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.StrawberryBlock), 0, new ModelResourceLocation(MODID + ":" + "strawberryblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.HopsBlock), 0, new ModelResourceLocation(MODID + ":" + "hopsblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BarleyBlock), 0, new ModelResourceLocation(MODID + ":" + "barleyblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.BlueberryBlock), 0, new ModelResourceLocation(MODID + ":" + "blueberryblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.PineappleBlock), 0, new ModelResourceLocation(MODID + ":" + "pineappleblock", "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockHandler.WineBlock), 0, new ModelResourceLocation(MODID + ":" + "grapeblock", "inventory"));
-        
-    	//Item\\
-        
-        //Food
-        renderItem.getItemModelMesher().register(ItemHandler.Corn_flakes, 0, new ModelResourceLocation(MODID + ":" + "Corn_flakes", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Corn_Item, 0, new ModelResourceLocation(MODID + ":" + "Corn_Item", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.AppleJam, 0, new ModelResourceLocation(MODID + ":" + "applejam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.AppleSlice, 0, new ModelResourceLocation(MODID + ":" + "appleslice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.AppleYoghurt, 0, new ModelResourceLocation(MODID + ":" + "appleyoghurt", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BakedToast, 0, new ModelResourceLocation(MODID + ":" + "bakedtoast", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Barley, 0, new ModelResourceLocation(MODID + ":" + "barley", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Blueberry, 0, new ModelResourceLocation(MODID + ":" + "blueberry", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Broccoli, 0, new ModelResourceLocation(MODID + ":" + "broccoli", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Cabbage, 0, new ModelResourceLocation(MODID + ":" + "cabbage", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Capsicum, 0, new ModelResourceLocation(MODID + ":" + "capsicum", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Cherry, 0, new ModelResourceLocation(MODID + ":" + "cherry", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CherryJam, 0, new ModelResourceLocation(MODID + ":" + "cherryjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Cucumber, 0, new ModelResourceLocation(MODID + ":" + "cucumber", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Hops, 0, new ModelResourceLocation(MODID + ":" + "hops", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.JellyP, 0, new ModelResourceLocation(MODID + ":" + "jellyp", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Pear, 0, new ModelResourceLocation(MODID + ":" + "pear", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PearJam, 0, new ModelResourceLocation(MODID + ":" + "pearjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PearSlice, 0, new ModelResourceLocation(MODID + ":" + "pearslice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Pineapple, 0, new ModelResourceLocation(MODID + ":" + "pineapple", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Plum, 0, new ModelResourceLocation(MODID + ":" + "plum", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PlumJam, 0, new ModelResourceLocation(MODID + ":" + "plumjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PlumSlice, 0, new ModelResourceLocation(MODID + ":" + "plumslice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Radish, 0, new ModelResourceLocation(MODID + ":" + "radish", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Rice, 0, new ModelResourceLocation(MODID + ":" + "rice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.slicedCheese, 0, new ModelResourceLocation(MODID + ":" + "slicedcheese", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Strawberry, 0, new ModelResourceLocation(MODID + ":" + "strawberry", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Toast, 0, new ModelResourceLocation(MODID + ":" + "toast", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ToastWAJ, 0, new ModelResourceLocation(MODID + ":" + "toastwithapplejam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ToastWCherryJ, 0, new ModelResourceLocation(MODID + ":" + "toastwithcherryjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ToastWPearJ, 0, new ModelResourceLocation(MODID + ":" + "toastwithpearjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ToastWPlumJ, 0, new ModelResourceLocation(MODID + ":" + "toastwithplumjam", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Tomato, 0, new ModelResourceLocation(MODID + ":" + "tomato", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Wine, 0, new ModelResourceLocation(MODID + ":" + "grape", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.backpack, 0, new ModelResourceLocation(MODID + ":" + "backpack", "inventory"));
-
-        //Seeds
-        renderItem.getItemModelMesher().register(ItemHandler.Corn_Seed, 0, new ModelResourceLocation(MODID + ":" + "Corn_Seed", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BarleySeeds, 0, new ModelResourceLocation(MODID + ":" + "barleyseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BlueberrySeeds, 0, new ModelResourceLocation(MODID + ":" + "blueberryseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BroccoliSeeds, 0, new ModelResourceLocation(MODID + ":" + "broccoliseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CabbageSeeds, 0, new ModelResourceLocation(MODID + ":" + "cabbageseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CapsicumSeeds, 0, new ModelResourceLocation(MODID + ":" + "capsicumseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CucumberSeeds, 0, new ModelResourceLocation(MODID + ":" + "cucumberseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.HopsSeeds, 0, new ModelResourceLocation(MODID + ":" + "hopsseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PineappleSeeds, 0, new ModelResourceLocation(MODID + ":" + "pineappleseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.RadishSeeds, 0, new ModelResourceLocation(MODID + ":" + "radishseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.RiceSeeds, 0, new ModelResourceLocation(MODID + ":" + "riceseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.StrawberrySeeds, 0, new ModelResourceLocation(MODID + ":" + "strawberryseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.TomatoSeeds, 0, new ModelResourceLocation(MODID + ":" + "tomatoseeds", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.WineSeeds, 0, new ModelResourceLocation(MODID + ":" + "grapeseeds", "inventory"));	
-  
-        //Zbytek
-        renderItem.getItemModelMesher().register(ItemHandler.Salt, 0, new ModelResourceLocation(MODID + ":" + "salt", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.GlassFJ, 0, new ModelResourceLocation(MODID + ":" + "glass", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ingotCopper, 0, new ModelResourceLocation(MODID + ":" + "ingotcopper", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Knife, 0, new ModelResourceLocation(MODID + ":" + "knife", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ScarecrowItem, 0, new ModelResourceLocation(MODID + ":" + "scarecrow_item", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CheeseItem, 0, new ModelResourceLocation(MODID + ":" + "cheese", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.AppleCake, 0, new ModelResourceLocation(MODID + ":" + "applecake", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.HotWaterBucket, 0, new ModelResourceLocation(MODID + ":" + "hotwater", "inventory"));
-
-        //Juice
-        renderItem.getItemModelMesher().register(ItemHandler.AppleJuice, 0, new ModelResourceLocation(MODID + ":" + "applejuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CarrotJuice, 0, new ModelResourceLocation(MODID + ":" + "carrotjuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.CherryJuice, 0, new ModelResourceLocation(MODID + ":" + "cherryjuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PearJuice, 0, new ModelResourceLocation(MODID + ":" + "pearjuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PineappleJuice, 0, new ModelResourceLocation(MODID + ":" + "pineapplejuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.PlumJuice, 0, new ModelResourceLocation(MODID + ":" + "plumjuice", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.StrawberryJuice, 0, new ModelResourceLocation(MODID + ":" + "strawberryjuice", "inventory"));
-
-        //Beer
-        renderItem.getItemModelMesher().register(ItemHandler.Bottle, 0, new ModelResourceLocation(MODID + ":" + "bottle", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BeerBottle, 0, new ModelResourceLocation(MODID + ":" + "beerbottle", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Malt, 0, new ModelResourceLocation(MODID + ":" + "malt", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.SoakedBarley, 0, new ModelResourceLocation(MODID + ":" + "soakedbarley", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Mash, 0, new ModelResourceLocation(MODID + ":" + "mash", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.Worts, 0, new ModelResourceLocation(MODID + ":" + "worts", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.ColdWorts, 0, new ModelResourceLocation(MODID + ":" + "coldworts", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BucketCurd, 0, new ModelResourceLocation(MODID + ":" + "curd", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BeerBucket, 0, new ModelResourceLocation(MODID + ":" + "hotbeer", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.KegOfBeer, 0, new ModelResourceLocation(MODID + ":" + "kegofbeer", "inventory"));
-        
-        //Wine
-        renderItem.getItemModelMesher().register(ItemHandler.GlassFW, 0, new ModelResourceLocation(MODID + ":" + "glassfw", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.GlassSW, 0, new ModelResourceLocation(MODID + ":" + "glasssw", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BottleFW, 0, new ModelResourceLocation(MODID + ":" + "bottlefw", "inventory"));
-        renderItem.getItemModelMesher().register(ItemHandler.BottleSW, 0, new ModelResourceLocation(MODID + ":" + "bottlesw", "inventory"));
-
+    	FarmCraft2Recipe.init();  	
     }
-    
+
     @EventHandler
     public static void PreLoad(FMLPreInitializationEvent PreEvent) {
         proxy.registerTileEntities();
-        proxy.preInit();
+        proxy.preInit();        
     }
     
     @EventHandler
@@ -352,10 +278,16 @@ public class Main
         network_channel = NetworkRegistry.INSTANCE.newSimpleChannel("GROSSIK.FARMCRAFT");
         network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.SERVER);
         network_channel.registerMessage(MessageTileEntitySync.Handler.class, MessageTileEntitySync.class, 0, Side.CLIENT);
+             
+        sounds = new FC2Sounds();
         
         proxy.registerRenderer();
-
-		registerBiomeWithTypes(FC2TreeBiome, "FC2TreeBiome", 100, BiomeType.WARM, Type.PLAINS, Type.SPOOKY);
+		proxy.preInitRenders();
+		proxy.registerEntities();
+				
+		GameRegistry.register(FC2TreeBiome.setRegistryName(new ResourceLocation(MODID, "FC2TreeBiome")));
+		BiomeDictionary.registerBiomeType(FC2TreeBiome, Type.PLAINS, Type.SPOOKY);
+		BiomeManager.addBiome(BiomeType.WARM, new BiomeEntry(FC2TreeBiome, 100));
 		BiomeManager.addSpawnBiome(FC2TreeBiome);
     	
     	OreDictionary.registerOre("oreCopper", BlockHandler.OreCopper);
@@ -365,11 +297,31 @@ public class Main
     	GameRegistry.registerWorldGenerator(new WordGen(), 0);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new FC2_GuiHandler());
+        
+        MinecraftForge.EVENT_BUS.register(new FarmCraft2Event());
+        
+        FMLCommonHandler.instance().bus().register(new FC2VersionEvent());
+        
+        ConfigHandler.init(event.getSuggestedConfigurationFile());
     }
     
-    private static void registerBiomeWithTypes(BiomeGenBase biome, String name, int weight, BiomeType btype, Type...types){
-		GameRegistry.register(biome.setRegistryName(new ResourceLocation(MODID, name)));
-		BiomeDictionary.registerBiomeType(biome, types);
-		BiomeManager.addBiome(btype, new BiomeEntry(biome, weight));
+	private static void register(Block block, ItemBlock ib, String name, String unlocal)
+	{
+		block.setUnlocalizedName(unlocal).setRegistryName(Main.MODID, name);
+		ib.setUnlocalizedName(unlocal).setRegistryName(Main.MODID, name);
+		GameRegistry.register(block);
+		GameRegistry.register(ib);
+	}	
+	
+	private static void register(Block block, ItemBlock ib, String name)
+	{
+		register(block, ib, name, name);		
+	}
+	
+	private static SoundEvent registerSoundEvent(String name){
+		ResourceLocation res = new ResourceLocation(MODID, name);
+		SoundEvent evt = new SoundEvent(res).setRegistryName(res);
+		GameRegistry.register(evt);
+		return evt;
 	}
 }

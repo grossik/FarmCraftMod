@@ -3,7 +3,7 @@ package cz.grossik.farmcraft2.juicer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -39,41 +39,38 @@ public class ContainerJuicer extends Container
         }
     }
 
-    public void onCraftGuiOpened(ICrafting listener)
+    public void addListener(IContainerListener listener)
     {
-        super.onCraftGuiOpened(listener);
+        super.addListener(listener);
         listener.sendAllWindowProperties(this, this.tileFurnace);
     }
 
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
 
-        for (int i = 0; i < this.crafters.size(); ++i)
+        for (int i = 0; i < this.listeners.size(); ++i)
         {
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
+            IContainerListener icontainerlistener = (IContainerListener)this.listeners.get(i);
 
-            if (this.cookTime != this.tileFurnace.getField(0))
+            if (this.cookTime != this.tileFurnace.getField(2))
             {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileFurnace.getField(0));
+                icontainerlistener.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
             }
 
-            if (this.furnaceBurnTime != this.tileFurnace.getField(1))
+            if (this.furnaceBurnTime != this.tileFurnace.getField(0))
             {
-                icrafting.sendProgressBarUpdate(this, 1, this.tileFurnace.getField(1));
+                icontainerlistener.sendProgressBarUpdate(this, 0, this.tileFurnace.getField(0));
             }
 
-            if (this.currentItemBurnTime != this.tileFurnace.getField(2))
+            if (this.currentItemBurnTime != this.tileFurnace.getField(1))
             {
-                icrafting.sendProgressBarUpdate(this, 2, this.tileFurnace.getField(2));
+                icontainerlistener.sendProgressBarUpdate(this, 1, this.tileFurnace.getField(1));
             }
 
             if (this.totalCookTime != this.tileFurnace.getField(3))
             {
-                icrafting.sendProgressBarUpdate(this, 3, this.tileFurnace.getField(3));
+                icontainerlistener.sendProgressBarUpdate(this, 3, this.tileFurnace.getField(3));
             }
         }
 
@@ -82,7 +79,7 @@ public class ContainerJuicer extends Container
         this.currentItemBurnTime = this.tileFurnace.getField(1);
         this.totalCookTime = this.tileFurnace.getField(3);
     }
-
+    
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data)
     {
@@ -94,9 +91,6 @@ public class ContainerJuicer extends Container
         return this.tileFurnace.isUseableByPlayer(playerIn);
     }
 
-    /**
-     * Take a stack from the specified inventory slot.
-     */
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;

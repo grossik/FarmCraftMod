@@ -1,0 +1,6 @@
+{
+    "parent": "farmcraft2:block/densecrop",
+    "textures": {
+        "crop": "farmcraft2:blocks/grape_1"
+    }
+}

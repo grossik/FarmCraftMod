@@ -29,6 +29,6 @@ public class SlotFermentingBarrelFuel extends Slot
 
     public static boolean isBucket(ItemStack stack)
     {
-        return stack != null && stack.getItem() != null && stack.getItem() == Items.bucket;
+        return stack != null && stack.getItem() != null && stack.getItem() == Items.BUCKET;
     }
 }

@@ -36,24 +36,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Block_FermentingBarrel extends BlockContainer
 {
-    protected static final AxisAlignedBB BARREL_AABB = new AxisAlignedBB(0.165D,0.0D,0.165D, 0.835D,0.620D,0.835D);
-
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     private final boolean isBurning;
     private static boolean keepInventory;
 
     public Block_FermentingBarrel(boolean isBurning)
     {
-        super(Material.wood);
+        super(Material.WOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         this.isBurning = isBurning;
     }
-   
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return BARREL_AABB;
-    }
-
+    
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
     {
         return true;
@@ -123,7 +116,7 @@ public class Block_FermentingBarrel extends BlockContainer
 
             if (rand.nextDouble() < 0.1D)
             {
-                pos.playSound((double)state.getX() + 0.5D, (double)state.getY(), (double)state.getZ() + 0.5D, SoundEvents.block_furnace_fire_crackle, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+                pos.playSound((double)state.getX() + 0.5D, (double)state.getY(), (double)state.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
             }
         }
     }
@@ -228,14 +221,6 @@ public class Block_FermentingBarrel extends BlockContainer
         return new ItemStack(BlockHandler.FermentingBarrelOff);
     }
 
-    /**
-     * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
-     */
-
-
-    /**
-     * Convert the given metadata into a BlockState for this Block
-     */
     public IBlockState getStateFromMeta(int meta)
     {
         EnumFacing enumfacing = EnumFacing.getFront(meta);

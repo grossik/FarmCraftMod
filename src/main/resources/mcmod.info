@@ -1,15 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
+  "modid": "farmcraft2",
+  "name": "FarmCraft 2",
+  "description": "This mod adds new plants, trees, fruits, vegetables and many other things.",
+  "version": "1.0",
+  "mcversion": "1.10.2",
+  "url": "http://grossik.4fan.cz/",
+  "updateUrl": "http://farmcraft2.8u.cz/wiki.php",
+  "authorList": ["Grossik and GravelCZLP"],
+  "logoFile": "logo.png",
   "screenshots": [],
   "dependencies": []
 }

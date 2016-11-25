@@ -37,7 +37,7 @@ public class InventoryManager extends WorldSavedData implements IInventoryManage
     public static InventoryManager get(World world)
     {
         MapStorage storage = world.getMapStorage();
-        InventoryManager instance = (InventoryManager) storage.loadData(InventoryManager.class, StorageKey);
+        InventoryManager instance = (InventoryManager) storage.getOrLoadData(InventoryManager.class, StorageKey);
         if (instance == null)
         {
             instance = new InventoryManager();
@@ -102,7 +102,7 @@ public class InventoryManager extends WorldSavedData implements IInventoryManage
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTagCompound)
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound)
     {
         NBTTagCompound temp = global.serializeNBT();
 
@@ -117,6 +117,7 @@ public class InventoryManager extends WorldSavedData implements IInventoryManage
         }
 
         nbtTagCompound.setTag("Private", list);
+		return nbtTagCompound;
     }
 
     public void importCapabilityData(EntityPlayer player, NBTTagCompound nbt)

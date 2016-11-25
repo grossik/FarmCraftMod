@@ -8,8 +8,12 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.util.Translator;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -58,9 +62,9 @@ public class MashTunSmeltingCategory extends MashTunRecipeCategory {
 		guiItemStacks.init(inputSlot, true, 30, 17);
 		guiItemStacks.init(fuelSlot, true, 0, 17);
 		guiItemStacks.init(outputSlot, false, 90, 18);
-
-		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs());
-		guiItemStacks.setFromRecipe(fuelSlot, new ItemStack(ItemHandler.HotWaterBucket, 4));
+	      
+		guiItemStacks.setFromRecipe(inputSlot, recipeWrapper.getInputs().get(0));
+		guiItemStacks.setFromRecipe(fuelSlot, recipeWrapper.getInputs().get(1));
 		guiItemStacks.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
 	}
 }

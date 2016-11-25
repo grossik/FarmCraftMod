@@ -17,7 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 public class WorldGenPearTree extends WorldGenAbstractTree
 {
-    private static final IBlockState field_181653_a = Blocks.log.getDefaultState();
+    private static final IBlockState field_181653_a = Blocks.LOG.getDefaultState();
     private static final IBlockState field_181654_b = BlockHandler.leavesPearNormal.getDefaultState();
     /** The minimum height of a generated tree. */
     private final int minTreeHeight;
@@ -71,7 +71,7 @@ public class WorldGenPearTree extends WorldGenAbstractTree
                     {
                         if (j >= 0 && j < worldIn.getHeight())
                         {
-                            if (!this.isReplaceable(worldIn,blockpos$mutableblockpos.set(l, j, i1)))
+                            if (!this.isReplaceable(worldIn,blockpos$mutableblockpos.setPos(l, j, i1)))
                             {
                                 flag = false;
                             }
@@ -116,7 +116,7 @@ public class WorldGenPearTree extends WorldGenAbstractTree
                                     BlockPos blockpos = new BlockPos(k1, i3, i2);
                                     state = worldIn.getBlockState(blockpos);
 
-                                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getMaterial() == Material.vine)
+                                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getMaterial() == Material.VINE)
                                     {
                                         this.setBlockAndNotifyAdequately(worldIn, blockpos, this.metaLeaves);
                                     }
@@ -130,7 +130,7 @@ public class WorldGenPearTree extends WorldGenAbstractTree
                         BlockPos upN = position.up(j3);
                         state = worldIn.getBlockState(upN);
 
-                        if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.vine)
+                        if (state.getBlock().isAir(state, worldIn, upN) || state.getBlock().isLeaves(state, worldIn, upN) || state.getMaterial() == Material.VINE)
                         {
                             this.setBlockAndNotifyAdequately(worldIn, position.up(j3), this.metaWood);
 
@@ -171,7 +171,7 @@ public class WorldGenPearTree extends WorldGenAbstractTree
                             {
                                 for (int i5 = position.getZ() - k4; i5 <= position.getZ() + k4; ++i5)
                                 {
-                                    blockpos$mutableblockpos1.set(l4, k3, i5);
+                                    blockpos$mutableblockpos1.setPos(l4, k3, i5);
 
                                     state = worldIn.getBlockState(blockpos$mutableblockpos1);
                                     if (state.getBlock().isLeaves(state, worldIn, blockpos$mutableblockpos1))
@@ -237,12 +237,12 @@ public class WorldGenPearTree extends WorldGenAbstractTree
 
     private void func_181652_a(World p_181652_1_, int p_181652_2_, BlockPos p_181652_3_, EnumFacing p_181652_4_)
     {
-        this.setBlockAndNotifyAdequately(p_181652_1_, p_181652_3_, Blocks.cocoa.getDefaultState().withProperty(BlockCocoa.AGE, Integer.valueOf(p_181652_2_)).withProperty(BlockCocoa.FACING, p_181652_4_));
+        this.setBlockAndNotifyAdequately(p_181652_1_, p_181652_3_, Blocks.COCOA.getDefaultState().withProperty(BlockCocoa.AGE, Integer.valueOf(p_181652_2_)).withProperty(BlockCocoa.FACING, p_181652_4_));
     }
 
     private void func_181651_a(World p_181651_1_, BlockPos p_181651_2_, PropertyBool p_181651_3_)
     {
-        this.setBlockAndNotifyAdequately(p_181651_1_, p_181651_2_, Blocks.vine.getDefaultState().withProperty(p_181651_3_, Boolean.valueOf(true)));
+        this.setBlockAndNotifyAdequately(p_181651_1_, p_181651_2_, Blocks.VINE.getDefaultState().withProperty(p_181651_3_, Boolean.valueOf(true)));
     }
 
     private void func_181650_b(World p_181650_1_, BlockPos p_181650_2_, PropertyBool p_181650_3_)

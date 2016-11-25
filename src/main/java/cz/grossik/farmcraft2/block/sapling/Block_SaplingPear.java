@@ -19,7 +19,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class Block_SaplingPear extends BlockSapling {
 
 	public Block_SaplingPear() {
-		setStepSound(SoundType.PLANT);
 		setCreativeTab(Main.FarmCraft2Tab);
 	}
 
@@ -27,7 +26,7 @@ public class Block_SaplingPear extends BlockSapling {
 	{
 		if (!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(world, random, pos)) return;
 
-		world.setBlockState(pos, Blocks.air.getDefaultState(), 1);
+		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 1);
 		Object obj = new WorldGenPearTree(true);
 		if(!((WorldGenerator) obj).generate(world, random, pos))
 			world.setBlockState(pos, getDefaultState(), 4);

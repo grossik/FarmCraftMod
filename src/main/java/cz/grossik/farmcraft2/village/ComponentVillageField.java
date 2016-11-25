@@ -6,6 +6,7 @@ import java.util.Random;
 import cz.grossik.farmcraft2.handler.BlockHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -28,11 +29,11 @@ public class ComponentVillageField extends StructureVillagePieces.Field2{
 
     public ComponentVillageField(StructureVillagePieces.Start start, int p_i45569_2_, Random rand, StructureBoundingBox p_i45569_4_, EnumFacing facing)
     {
-        super(start, p_i45569_2_, rand, p_i45569_4_, facing);
-        this.func_186164_a(facing);
+        super();
+        this.setCoordBaseMode(facing);
         this.boundingBox = p_i45569_4_;
-        this.cropTypeA = this.func_151560_a(rand);
-        this.cropTypeB = this.func_151560_a(rand);
+        this.cropTypeA = this.getRandomCropType(rand);
+        this.cropTypeB = this.getRandomCropType(rand);
     }
 
     /**
@@ -41,8 +42,8 @@ public class ComponentVillageField extends StructureVillagePieces.Field2{
     protected void writeStructureToNBT(NBTTagCompound tagCompound)
     {
         super.writeStructureToNBT(tagCompound);
-        tagCompound.setInteger("CA", Block.blockRegistry.getIDForObject(this.cropTypeA));
-        tagCompound.setInteger("CB", Block.blockRegistry.getIDForObject(this.cropTypeB));
+        tagCompound.setInteger("CA", Block.REGISTRY.getIDForObject(this.cropTypeA));
+        tagCompound.setInteger("CB", Block.REGISTRY.getIDForObject(this.cropTypeB));
     }
 
     /**
@@ -55,9 +56,10 @@ public class ComponentVillageField extends StructureVillagePieces.Field2{
         this.cropTypeB = Block.getBlockById(tagCompound.getInteger("CB"));
     }
 
-    private Block func_151560_a(Random rand)
+
+    private Block getRandomCropType(Random rand)
     {
-        switch (rand.nextInt(5)) {
+        switch (rand.nextInt(15)) {
         case 0:
             return BlockHandler.TomatoBlock;
         case 1:
@@ -80,55 +82,48 @@ public class ComponentVillageField extends StructureVillagePieces.Field2{
             return BlockHandler.BarleyBlock;
         case 10:
             return BlockHandler.BlueberryBlock;
-        case 11:
-            return BlockHandler.Corn;
-        case 12:
-            return BlockHandler.WineBlock;
         default:
             return BlockHandler.PineappleBlock;
     }
 }
 
-    public static ComponentVillageField func_175852_a(StructureVillagePieces.Start start, List<StructureComponent> p_175852_1_, Random rand, int p_175852_3_, int p_175852_4_, int p_175852_5_, EnumFacing facing, int p_175852_7_)
+    public static ComponentVillageField createPiece(StructureVillagePieces.Start start, List<StructureComponent> p_175852_1_, Random rand, int p_175852_3_, int p_175852_4_, int p_175852_5_, EnumFacing facing, int p_175852_7_)
     {
         StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(p_175852_3_, p_175852_4_, p_175852_5_, 0, 0, 0, 7, 4, 9, facing);
         return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_175852_1_, structureboundingbox) == null ? new ComponentVillageField(start, p_175852_7_, rand, structureboundingbox, facing) : null;
     }
 
-    /**
-     * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
-     * Mineshafts at the end, it adds Fences...
-     */
     public boolean addComponentParts(World worldIn, Random randomIn, StructureBoundingBox structureBoundingBoxIn)
     {
-        if (this.field_143015_k < 0)
+        if (this.averageGroundLvl < 0)
         {
-            this.field_143015_k = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
+            this.averageGroundLvl = this.getAverageGroundLevel(worldIn, structureBoundingBoxIn);
 
-            if (this.field_143015_k < 0)
+            if (this.averageGroundLvl < 0)
             {
                 return true;
             }
 
-            this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 4 - 1, 0);
+            this.boundingBox.offset(0, this.averageGroundLvl - this.boundingBox.maxY + 4 - 1, 0);
         }
 
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 0, 6, 4, 8, Blocks.air.getDefaultState(), Blocks.air.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 1, 5, 0, 7, Blocks.farmland.getDefaultState(), Blocks.farmland.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 0, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 5, 0, 0, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 8, 5, 0, 8, Blocks.log.getDefaultState(), Blocks.log.getDefaultState(), false);
-        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 1, 3, 0, 7, Blocks.water.getDefaultState(), Blocks.water.getDefaultState(), false);
+        IBlockState iblockstate = this.getBiomeSpecificBlockState(Blocks.LOG.getDefaultState());
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 1, 0, 6, 4, 8, Blocks.AIR.getDefaultState(), Blocks.AIR.getDefaultState(), false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 1, 2, 0, 7, Blocks.FARMLAND.getDefaultState(), Blocks.FARMLAND.getDefaultState(), false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 4, 0, 1, 5, 0, 7, Blocks.FARMLAND.getDefaultState(), Blocks.FARMLAND.getDefaultState(), false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 0, 0, 0, 0, 0, 8, iblockstate, iblockstate, false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 6, 0, 0, 6, 0, 8, iblockstate, iblockstate, false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 0, 5, 0, 0, iblockstate, iblockstate, false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 1, 0, 8, 5, 0, 8, iblockstate, iblockstate, false);
+        this.fillWithBlocks(worldIn, structureBoundingBoxIn, 3, 0, 1, 3, 0, 7, Blocks.WATER.getDefaultState(), Blocks.WATER.getDefaultState(), false);
 
         for (int i = 1; i <= 7; ++i)
         {
-            int j = ((BlockCrops)this.cropTypeA).func_185526_g();
+            int j = ((BlockCrops)this.cropTypeA).getMaxAge();
             int k = j / 3;
             this.setBlockState(worldIn, this.cropTypeA.getStateFromMeta(MathHelper.getRandomIntegerInRange(randomIn, k, j)), 1, 1, i, structureBoundingBoxIn);
             this.setBlockState(worldIn, this.cropTypeA.getStateFromMeta(MathHelper.getRandomIntegerInRange(randomIn, k, j)), 2, 1, i, structureBoundingBoxIn);
-            int l = ((BlockCrops)this.cropTypeB).func_185526_g();
+            int l = ((BlockCrops)this.cropTypeB).getMaxAge();
             int i1 = l / 3;
             this.setBlockState(worldIn, this.cropTypeB.getStateFromMeta(MathHelper.getRandomIntegerInRange(randomIn, i1, l)), 4, 1, i, structureBoundingBoxIn);
             this.setBlockState(worldIn, this.cropTypeB.getStateFromMeta(MathHelper.getRandomIntegerInRange(randomIn, i1, l)), 5, 1, i, structureBoundingBoxIn);
@@ -139,7 +134,7 @@ public class ComponentVillageField extends StructureVillagePieces.Field2{
             for (int k1 = 0; k1 < 7; ++k1)
             {
                 this.clearCurrentPositionBlocksUpwards(worldIn, k1, 4, j1, structureBoundingBoxIn);
-                this.replaceAirAndLiquidDownwards(worldIn, Blocks.dirt.getDefaultState(), k1, -1, j1, structureBoundingBoxIn);
+                this.replaceAirAndLiquidDownwards(worldIn, Blocks.DIRT.getDefaultState(), k1, -1, j1, structureBoundingBoxIn);
             }
         }
 

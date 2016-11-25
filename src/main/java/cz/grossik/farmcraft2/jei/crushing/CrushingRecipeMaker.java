@@ -19,18 +19,16 @@ public class CrushingRecipeMaker {
 		CrushingRecipes furnaceRecipes = CrushingRecipes.instance();
 		Map<ItemStack, ItemStack> smeltingMap = furnaceRecipes.getSmeltingList();
 
-		List<CrushingRecipe> recipes = new ArrayList<>();
+		List<CrushingRecipe> recipes = new ArrayList<CrushingRecipe>();
 
 		for (Map.Entry<ItemStack, ItemStack> itemStackItemStackEntry : smeltingMap.entrySet()) {
 			ItemStack input = itemStackItemStackEntry.getKey();
-			ItemStack fuel = itemStackItemStackEntry.getKey();
 			ItemStack output = itemStackItemStackEntry.getValue();
 
 			float experience = furnaceRecipes.getSmeltingExperience(output);
 
 			List<ItemStack> inputs = stackHelper.getSubtypes(input);
-			List<ItemStack> fuels = stackHelper.getSubtypes(fuel);
-			CrushingRecipe recipe = new CrushingRecipe(inputs, fuels, output, experience);
+			CrushingRecipe recipe = new CrushingRecipe(inputs, null, output, experience);
 			recipes.add(recipe);
 		}
 

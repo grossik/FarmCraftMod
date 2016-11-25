@@ -14,6 +14,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import cz.grossik.farmcraft2.handler.ItemHandler;
@@ -66,14 +69,9 @@ public class FermentingBarrelSmeltingCategory extends FermentingBarrelRecipeCate
 		guiItemStacks.init(inputSlot, true, 0, 0);
 		guiItemStacks.init(fuelSlot, true, 0, 36);
 		guiItemStacks.init(outputSlot, false, 60, 18);
-
-		guiItemStacks.setFromRecipe(inputSlot, stack_helper.toItemStackList(recipeWrapper.getInputs().get(0)));
-		
-		/**if(recipeWrapper.getInputs() == ItemHandler.WineBucket){
-		guiItemStacks.setFromRecipe(fuelSlot, new ItemStack(Items.sugar, 2));
-		}else{
-	    guiItemStacks.setFromRecipe(fuelSlot, new ItemStack(Items.apple, 2));}**/
-		
+	      
+		guiItemStacks.setFromRecipe(inputSlot, stack_helper.toItemStackList(recipeWrapper.getInputs().get(0)));	
+		guiItemStacks.setFromRecipe(fuelSlot, stack_helper.toItemStackList(recipeWrapper.getInputs().get(1)));
 		guiItemStacks.setFromRecipe(outputSlot, recipeWrapper.getOutputs());
 	}
 }

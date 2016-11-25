@@ -5,11 +5,11 @@ import java.util.Random;
 import cz.grossik.farmcraft2.wordgen.tree.WorldGenCherryTree;
 import cz.grossik.farmcraft2.wordgen.tree.WorldGenPearTree;
 import cz.grossik.farmcraft2.wordgen.tree.WorldGenPlumTree;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 
-public class BiomeGenFC2Tree extends BiomeGenBase
+public class BiomeGenFC2Tree extends Biome
 {
 	private WorldGenAbstractTree WorldGenCherryTrees;
 	private WorldGenAbstractTree WorldGenPlumTrees;
@@ -17,7 +17,7 @@ public class BiomeGenFC2Tree extends BiomeGenBase
 
     protected boolean field_150628_aC;
 
-    public BiomeGenFC2Tree(boolean p_i46699_1_, BiomeGenBase.BiomeProperties properties)
+    public BiomeGenFC2Tree(boolean p_i46699_1_, Biome.BiomeProperties properties)
     {
         super(properties);
         this.field_150628_aC = p_i46699_1_;

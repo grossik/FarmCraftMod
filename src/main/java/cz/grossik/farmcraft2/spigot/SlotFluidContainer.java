@@ -1,10 +1,12 @@
 package cz.grossik.farmcraft2.spigot;
 
+import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidContainerItem;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class SlotFluidContainer extends Slot
 {
@@ -16,9 +18,10 @@ public class SlotFluidContainer extends Slot
   @Override
   public boolean isItemValid(ItemStack stack)
   {
-    ItemStack slot_stack = getStack();
-    return (stack.getItem() instanceof IFluidContainerItem || FluidContainerRegistry.isContainer(stack))
-        && (slot_stack == null || slot_stack.stackSize == 0);
+	  if(stack.getItem() == ItemHandler.KegOfBeer)
+		  return true;
+	  else
+		  return false;
   }
 
   @Override

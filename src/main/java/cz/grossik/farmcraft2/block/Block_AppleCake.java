@@ -31,7 +31,7 @@ public class Block_AppleCake extends Block
 
     public Block_AppleCake()
     {
-        super(Material.cake);
+        super(Material.CAKE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(BITES, Integer.valueOf(0)));
         this.setTickRandomly(true);
     }
@@ -43,7 +43,7 @@ public class Block_AppleCake extends Block
 
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getCollisionBoundingBox(IBlockState worldIn, World pos, BlockPos state)
-    {
+    {	
         return worldIn.getSelectedBoundingBox(pos, state);
     }
 
@@ -67,7 +67,7 @@ public class Block_AppleCake extends Block
     {
         if (player.canEat(false))
         {
-            player.addStat(StatList.cakeSlicesEaten);
+            player.addStat(StatList.CAKE_SLICES_EATEN);
             player.getFoodStats().addStats(2, 0.1F);
             int i = ((Integer)state.getValue(BITES)).intValue();
 
@@ -99,7 +99,6 @@ public class Block_AppleCake extends Block
     {
         return worldIn.getBlockState(pos.down()).getMaterial().isSolid();
     }
-
 
     public int quantityDropped(Random random)
     {

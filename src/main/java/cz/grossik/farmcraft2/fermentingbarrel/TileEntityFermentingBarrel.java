@@ -1,5 +1,7 @@
 package cz.grossik.farmcraft2.fermentingbarrel;
 
+import javax.annotation.Nullable;
+
 import cz.grossik.farmcraft2.handler.ItemHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,17 +57,19 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
     /**
      * Removes up to a specified number of items from an inventory slot and returns them in a new stack.
      */
+    @Nullable
     public ItemStack decrStackSize(int index, int count)
     {
-        return ItemStackHelper.func_188382_a(this.furnaceItemStacks, index, count);
+        return ItemStackHelper.getAndSplit(this.furnaceItemStacks, index, count);
     }
 
     /**
      * Removes a stack from the given slot and returns it.
      */
+    @Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        return ItemStackHelper.func_188383_a(this.furnaceItemStacks, index);
+        return ItemStackHelper.getAndRemove(this.furnaceItemStacks, index);
     }
 
     /**
@@ -138,7 +142,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
         }
     }
 
-    public void writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
         compound.setInteger("BurnTime", this.furnaceBurnTime);
@@ -163,6 +167,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
         {
             compound.setString("CustomName", this.furnaceCustomName);
         }
+		return compound;
     }
 
     /**
@@ -178,12 +183,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
      */
     public boolean isBurning()
     {
-        if(SlotFermentingBarrel.jetamcoldworts == true)
-        {	
-         return this.totalCookTime > 0;
-        } else {
          return this.furnaceBurnTime > 0;
-        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -307,9 +307,9 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
                 this.furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.sponge) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.bucket)
+            if (this.furnaceItemStacks[0].getItem() == Item.getItemFromBlock(Blocks.SPONGE) && this.furnaceItemStacks[0].getMetadata() == 1 && this.furnaceItemStacks[1] != null && this.furnaceItemStacks[1].getItem() == Items.BUCKET)
             {
-                this.furnaceItemStacks[1] = new ItemStack(Items.water_bucket);
+                this.furnaceItemStacks[1] = new ItemStack(Items.WATER_BUCKET);
             }
 
             --this.furnaceItemStacks[0].stackSize;
@@ -335,7 +335,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
         {
             Item item = p_145952_0_.getItem();
 
-            if (item == Items.sugar) return 150;
+            if (item == Items.SUGAR) return 150;
 
             return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(p_145952_0_);
         }
@@ -382,7 +382,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
         else
         {
             ItemStack itemstack = this.furnaceItemStacks[1];
-            return isItemFuel(stack) || SlotFermentingBarrelFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.bucket);
+            return isItemFuel(stack) || SlotFermentingBarrelFuel.isBucket(stack) && (itemstack == null || itemstack.getItem() != Items.BUCKET);
         }
     }
 
@@ -416,7 +416,7 @@ public class TileEntityFermentingBarrel extends TileEntityLockable implements IT
         {
             Item item = stack.getItem();
 
-            if (item != Items.water_bucket && item != Items.bucket)
+            if (item != Items.WATER_BUCKET && item != Items.BUCKET)
             {
                 return false;
             }

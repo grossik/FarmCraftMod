@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "stage=0": { "model": "farmcraft2:banana_sapling" },
+        "stage=1": { "model": "farmcraft2:banana_sapling" }
+    }
+}

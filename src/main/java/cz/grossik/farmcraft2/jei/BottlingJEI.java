@@ -9,9 +9,11 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Lists;
 
 import cz.grossik.farmcraft2.bottling.BottlingRecipeManager;
+import cz.grossik.farmcraft2.bottling.GuiBottling;
 import cz.grossik.farmcraft2.bottling.IBottlingRecipe;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -126,6 +128,10 @@ public class BottlingJEI
       localized_name = Translator.translateToLocal("Bottling");
     }
 
+	public static void register(IModRegistry registry, IGuiHelper guiHelper) {
+		registry.addRecipeClickArea(GuiBottling.class, 80, 35, 22, 16, "bottlingoff");
+	}
+	
     @Override
     @Nonnull
     public IDrawable getBackground()
@@ -175,7 +181,7 @@ public class BottlingJEI
     }
   }
 
-  static public class Handler implements IRecipeHandler<Wrapper>
+  public static class Handler implements IRecipeHandler<Wrapper>
   {
     @Override
     @Nonnull
@@ -203,6 +209,11 @@ public class BottlingJEI
     {
       return true;
     }
+
+	@Override
+	public String getRecipeCategoryUid(Wrapper arg0) {
+	      return "bottlingoff";
+	}
   }
 
   @SuppressWarnings("unchecked")

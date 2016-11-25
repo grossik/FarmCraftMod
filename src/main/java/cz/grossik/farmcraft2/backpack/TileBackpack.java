@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
@@ -18,7 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import java.util.UUID;
 
 public class TileBackpack
-        extends TileEntityEnderChest
+        extends TileEntityChest
 {
     public static class Private extends TileBackpack
     {
@@ -82,13 +83,14 @@ public class TileBackpack
         boundToPlayer = InventoryManager.uuidFromNBT(tag);
     }
 
-    public void writeToNBT(NBTTagCompound tag)
+    public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         if (boundToPlayer != null)
         {
             InventoryManager.uuidToNBT(tag, boundToPlayer);
         }
+		return tag;
     }
 
     @Override
@@ -108,7 +110,6 @@ public class TileBackpack
         return super.getCapability(capability, facing);
     }
 
-    @Override
     public Packet getDescriptionPacket()
     {
         NBTTagCompound tag = new NBTTagCompound();
@@ -142,7 +143,7 @@ public class TileBackpack
         if (this.numPlayersUsing > 0 && this.lidAngle == 0.0F)
         {
             this.worldObj.playSound(null, x + 0.5D, y + 0.5D, z + 0.5D,
-                    SoundEvents.block_anvil_fall, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                    SoundEvents.BLOCK_ANVIL_FALL, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numPlayersUsing == 0 && this.lidAngle > 0.0F || this.numPlayersUsing > 0 && this.lidAngle < 1.0F)
@@ -168,7 +169,7 @@ public class TileBackpack
             if (this.lidAngle < closedThreshold && prevAngle >= closedThreshold)
             {
                 this.worldObj.playSound(null, x + 0.5D, y + 0.5D, z + 0.5D,
-                        SoundEvents.block_enderchest_close, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                        SoundEvents.BLOCK_ENDERCHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.lidAngle < 0.0F)

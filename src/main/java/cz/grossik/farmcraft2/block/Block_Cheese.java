@@ -31,7 +31,7 @@ public class Block_Cheese extends Block
 
     public Block_Cheese()
     {
-        super(Material.cake);
+        super(Material.CAKE);
         this.setDefaultState(this.blockState.getBaseState().withProperty(BITES, Integer.valueOf(0)));
         this.setTickRandomly(true);
     }
@@ -67,7 +67,7 @@ public class Block_Cheese extends Block
     {
         if (player.canEat(false))
         {
-            player.addStat(StatList.cakeSlicesEaten);
+            player.addStat(StatList.CAKE_SLICES_EATEN);
             player.getFoodStats().addStats(2, 0.1F);
             int i = ((Integer)state.getValue(BITES)).intValue();
 

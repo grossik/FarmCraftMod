@@ -5,16 +5,15 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.gui.GuiButton;
+import cz.grossik.farmcraft2.util.GuiFC;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiSpigot extends GuiFC
 {
-
   private static final ResourceLocation GUI_TEXTURE = new ResourceLocation("farmcraft2:textures/gui/container/spigot.png");
 
   public static final int TANK_HEIGHT = 47;
@@ -31,19 +30,15 @@ public class GuiSpigot extends GuiFC
 
   private static final int PROGRESS_OVERLAY_X = 176;
   private static final int PROGRESS_OVERLAY_Y = 53;
-
-  private static final int POWER_OVERLAY_X = 176;
-  private static final int POWER_OVERLAY_Y = 71;
   
-  private TileEntitySpigot te_caster;
-  private GuiButtonSpigot button_mode;
+  private TileEntitySpigot te_spigot;
 
-  public GuiSpigot(TileEntitySpigot cs, EntityPlayer player)
+  public GuiSpigot(TileEntitySpigot te, EntityPlayer player)
   {
-    super(new ContainerSpigot(cs, player));
+    super(new ContainerSpigot(te, player));
     allowUserInput = false;
     ySize = 166;
-    te_caster = cs;
+    te_spigot = te;
   }
 
   @Override
@@ -65,13 +60,13 @@ public class GuiSpigot extends GuiFC
     drawTexturedModalRect(window_x, window_y, 0, 0, xSize, ySize);
 
     //Draw progress bar.
-    int progress = te_caster.getProgress() * PROGRESS_WIDTH / TileEntitySpigot.CAST_TIME;
+    int progress = te_spigot.getProgress() * PROGRESS_WIDTH / TileEntitySpigot.CAST_TIME;
     if(progress > 0)
     {
       drawTexturedModalRect(window_x + PROGRESS_X, window_y + PROGRESS_Y, PROGRESS_OVERLAY_X, PROGRESS_OVERLAY_Y, progress, PROGRESS_HEIGHT);
     }
 
-    displayTank(window_x, window_y, TANK_X, TANK_Y, TANK_HEIGHT, TANK_OVERLAY_X, TANK_OVERLAY_Y, te_caster.getTank(0));
+    displayTank(window_x, window_y, TANK_X, TANK_Y, TANK_HEIGHT, TANK_OVERLAY_X, TANK_OVERLAY_Y, te_spigot.getTank(0));
   }
 
   @Override
@@ -82,7 +77,7 @@ public class GuiSpigot extends GuiFC
     if(isPointInRegion(TANK_X,TANK_Y,16,TANK_HEIGHT,mousex,mousey))
     {
       List<String> currenttip = new ArrayList<String>();
-      addTankTooltip(currenttip, mousex, mousey, te_caster.getTank(0));
+      addTankTooltip(currenttip, mousex, mousey, te_spigot.getTank(0));
       drawHoveringText(currenttip, mousex, mousey, fontRendererObj);
     }
   }
